@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    // --- 모든 UI 및 계산기 로직 시작 ---
     const els = {
         telecomCont: document.getElementById('telecom-options-simple'),
         internetCont: document.getElementById('internet-options-simple'),
@@ -206,7 +207,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const containers = [els.internetCont, els.tvCont, els.settopCont, els.additionalTvCont, els.combinedCont];
         containers.forEach(c => c.innerHTML = '');
 
-        // [수정] 데이터가 없어도 오류가 나지 않도록 || [] 추가
         (data.internet || []).forEach(item => els.internetCont.appendChild(createOptionButton('internet', item, telecomKey)));
         (data.tv || []).forEach(item => els.tvCont.appendChild(createOptionButton('tv', item, telecomKey)));
         (data.settop || []).forEach(item => els.settopCont.appendChild(createOptionButton('settop', item, telecomKey)));
@@ -499,18 +499,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     function setupQuickMenu() {
         const quickMenuContainer = document.querySelector('.quick-menu-container');
         const quickMenuToggle = document.querySelector('.quick-menu-toggle');
-        if (!quickMenuContainer || !quickMenuToggle) return;
-        const iconItems = document.querySelectorAll('.icon-item');
-        const panelToggleArrow = document.querySelector('.quick-menu-panel .toggle-arrow');
-        const selfSignupBtnIcon = document.querySelector('.icon-item[data-action="self-signup"]');
-        const selfSignupBtnInPanel = document.getElementById('quick-self-signup-btn');
+        const quickMenuPanel = document.querySelector('.quick-menu-panel');
+        if (!quickMenuContainer || !quickMenuToggle || !quickMenuPanel) return;
+
+        const panelToggleArrow = quickMenuPanel.querySelector('.toggle-arrow');
+        const iconItems = quickMenuToggle.querySelectorAll('.icon-item');
+        const selfSignupBtnIcon = quickMenuToggle.querySelector('.icon-item[data-action="self-signup"]');
+        const selfSignupBtnInPanel = quickMenuPanel.querySelector('#quick-self-signup-btn');
 
         const toggleMenu = (forceState) => {
             quickMenuContainer.classList.toggle('is-open', forceState);
         };
 
-        quickMenuToggle.addEventListener('click', () => toggleMenu());
-        if (panelToggleArrow) panelToggleArrow.addEventListener('click', () => toggleMenu());
+        quickMenuToggle.addEventListener('click', () => toggleMenu(true));
+        if (panelToggleArrow) panelToggleArrow.addEventListener('click', () => toggleMenu(false));
         
         iconItems.forEach(item => {
             if (item.dataset.action === 'self-signup') return;
