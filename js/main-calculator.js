@@ -495,19 +495,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     
     function setupQuickMenu() {
-        const openBtn = document.getElementById('quick-menu-header-btn');
-        const closeBtn = document.getElementById('quick-menu-close-btn');
-        const panel = document.getElementById('quick-menu-panel');
-        
-        if (!openBtn || !closeBtn || !panel) return;
+        const container = document.querySelector('.quick-menu-container');
+        const toggleBtn = document.getElementById('quick-menu-toggle');
+        if (!container || !toggleBtn) return;
 
-        const toggleMenu = (isOpen) => {
-            panel.classList.toggle('is-open', isOpen);
-        };
+        toggleBtn.addEventListener('click', () => {
+            container.classList.toggle('is-open');
+        });
 
-        openBtn.addEventListener('click', () => toggleMenu(true));
-        closeBtn.addEventListener('click', () => toggleMenu(false));
+        // 메뉴 외부 클릭 시 닫기
+        document.addEventListener('click', (e) => {
+            if (!container.contains(e.target)) {
+                container.classList.remove('is-open');
+            }
+        });
 
+        // 패널 내부의 버튼 이벤트 리스너 (기존 로직 재활용)
         const selfSignupBtnInPanel = document.getElementById('quick-self-signup-btn');
         const openQuickSignupModal = (e) => {
             e.preventDefault();
@@ -517,10 +520,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 modal.classList.add('visible');
                 modal.setAttribute('aria-hidden', 'false');
                 modal.dispatchEvent(new CustomEvent('initialize'));
-                toggleMenu(false);
+                container.classList.remove('is-open'); // 모달 열리면 퀵메뉴 닫기
             }
         };
         if (selfSignupBtnInPanel) selfSignupBtnInPanel.addEventListener('click', openQuickSignupModal);
+    }
         
         let touchStartX = 0, touchStartY = 0;
         const swipeThreshold = 50;
