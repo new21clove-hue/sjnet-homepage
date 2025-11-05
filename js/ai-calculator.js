@@ -257,38 +257,48 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function createResultCardHTML(result, rank) {
-        const { id, carrier, netBill, cashBenefit, totalBenefit, totalMobileDiscount, bestPlanName, details } = result;
-        const effectiveBill = netBill - totalMobileDiscount;
-        const totalMobileDiscount3Years = totalMobileDiscount * 36;
-        
-        return `
-            <div class="result-card">
-                <div class="rank-section">
-                    <div class="rank">${rank}</div>
-                    <div class="telecom-logo" style="color:${details.telecom.color};">${carrier}</div>
+    const { id, carrier, netBill, cashBenefit, totalBenefit, totalMobileDiscount, bestPlanName, details } = result;
+    const effectiveBill = netBill - totalMobileDiscount;
+    const totalMobileDiscount3Years = totalMobileDiscount * 36;
+    
+    // [개선] 계산식 문자열 생성
+    const calculationString = `(월정액 ${Math.round(netBill).toLocaleString()}원 - 결합할인 ${Math.round(totalMobileDiscount).toLocaleString()}원)`;
+
+    return `
+        <div class="result-card">
+            <div class="rank-section">
+                <div class="rank">${rank}</div>
+                <div class="telecom-logo" style="color:${details.telecom.color};">${carrier}</div>
+            </div>
+            <div class="details">
+                <div class="bill-breakdown">
+                    <div class="bill-breakdown-row"><span>인터넷+TV 월정액</span><span>${Math.round(netBill).toLocaleString()} 원</span></div>
+                    <div class="bill-breakdown-row discount"><span>휴대폰 결합할인</span><span>-${Math.round(totalMobileDiscount).toLocaleString()} 원</span></div>
+                    <div class="bill-breakdown-row total">
+                        <span>실제 체감 요금</span>
+                        <span>${Math.round(effectiveBill).toLocaleString()} 원</span>
+                    </div>
+                    <!-- [개선] 계산식 표시 추가 -->
+                    <div class="calculation-detail" style="font-size: 13px; color: #888; text-align: right; margin-top: 5px;">
+                        ${calculationString}
+                    </div>
                 </div>
-                <div class="details">
-                    <div class="bill-breakdown">
-                        <div class="bill-breakdown-row"><span>인터넷+TV 월정액</span><span>${Math.round(netBill).toLocaleString()} 원</span></div>
-                        <div class="bill-breakdown-row discount"><span>휴대폰 결합할인</span><span>-${Math.round(totalMobileDiscount).toLocaleString()} 원</span></div>
-                        <div class="bill-breakdown-row total"><span>실제 체감 요금</span><span>${Math.round(effectiveBill).toLocaleString()} 원</span></div>
-                    </div>
-                    <div class="benefit-details">
-                        <div class="benefit-row"><span>현금 혜택</span><span class="cash">${Math.round(cashBenefit).toLocaleString()} 원</span></div>
-                        <div class="benefit-row"><span>3년 요금 할인</span><span>${Math.round(totalMobileDiscount3Years).toLocaleString()} 원</span></div>
-                        <div class="benefit-row total"><span>총 혜택</span><span>${Math.round(cashBenefit + totalMobileDiscount3Years).toLocaleString()} 원</span></div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <p class="best-plan">추천 결합: ${bestPlanName || '미결합'}</p>
-                    <div class="card-buttons">
-                        <button class="detail-link secondary" data-result-id="${id}">상세 견적 보기</button>
-                        <a href="signup.html" class="detail-link primary signup-link" data-result-id="${id}">셀프 가입</a>
-                    </div>
+                <div class="benefit-details">
+                    <div class="benefit-row"><span>현금 혜택</span><span class="cash">${Math.round(cashBenefit).toLocaleString()} 원</span></div>
+                    <div class="benefit-row"><span>3년 요금 할인</span><span>${Math.round(totalMobileDiscount3Years).toLocaleString()} 원</span></div>
+                    <div class="benefit-row total"><span>총 혜택</span><span>${Math.round(cashBenefit + totalMobileDiscount3Years).toLocaleString()} 원</span></div>
                 </div>
             </div>
-        `;
-    }
+            <div class="card-footer">
+                <p class="best-plan">추천 결합: ${bestPlanName || '미결합'}</p>
+                <div class="card-buttons">
+                    <button class="detail-link secondary" data-result-id="${id}">상세 견적 보기</button>
+                    <a href="signup.html" class="detail-link primary signup-link" data-result-id="${id}">셀프 가입</a>
+                </div>
+            </div>
+        </div>
+    `;
+}
 
     // --- 상세 견적 및 상담 신청 모달 로직 ---
     const modalOverlay = document.getElementById('detail-modal');
