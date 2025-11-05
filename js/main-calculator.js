@@ -1,17 +1,14 @@
 import { getFullData } from './data-service.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // 데이터베이스에서 전체 데이터를 비동기적으로 불러옵니다.
     const telecomData = await getFullData();
 
-    // 데이터를 불러오지 못하면 에러 메시지를 표시하고 실행 중단
     if (!telecomData) {
         const mainContainer = document.getElementById('calculator-section');
         if(mainContainer) mainContainer.innerHTML = '<p style="text-align:center; color:red; font-weight:bold;">[오류] 요금 정보를 불러오는 데 실패했습니다. 페이지를 새로고침하거나 관리자에게 문의하세요.</p>';
         return;
     }
 
-    // --- 여기서부터 모든 UI 및 계산기 로직 시작 ---
     const els = {
         telecomCont: document.getElementById('telecom-options-simple'),
         internetCont: document.getElementById('internet-options-simple'),
@@ -612,21 +609,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             btn.className = 'option-btn';
             btn.textContent = item.name.split('(')[0].trim();
             btn.dataset.name = item.name;
+            // [개선] item.key를 dataset에 추가
+            btn.dataset.key = item.key || item.id;
 
             btn.onclick = () => {
                 const wasSelected = btn.classList.contains('selected');
                 
-                if (type !== 'telecom') {
-                    container.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-                } else {
-                    container.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-                }
+                // [개선] 모든 버튼에서 selected 클래스 제거
+                container.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
 
                 if (wasSelected && type !== 'telecom') {
                     quickSignupState[type] = null;
                     if(type === 'tv') container.querySelector('.no-tv-btn')?.classList.add('selected');
                 } else {
-                    btn.classList.add('selected');
+                    btn.classList.add('selected'); // [개선] 현재 버튼에 selected 클래스 추가
                     quickSignupState[type] = item;
                     if (type === 'telecom') renderSubOptions(item.key);
                     if (type === 'tv') container.querySelector('.no-tv-btn')?.classList.remove('selected');
@@ -667,7 +663,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             quickSignupState = { usim: false };
             containers.usim.checked = false;
             containers.telecom.innerHTML = '';
-            initialTelecomOrder.forEach(key => createButton('telecom', { key: key, name: telecomData[key].name || key }, containers.telecom));
+            initialTelecomOrder.forEach(key => {
+                if (telecomData[key]) {
+                    createButton('telecom', { key: key, name: telecomData[key].name || key }, containers.telecom);
+                }
+            });
             const firstTelecomBtn = containers.telecom.querySelector('.option-btn');
             if (firstTelecomBtn) firstTelecomBtn.click();
         };
@@ -698,11 +698,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
     }
 
+    // [개선] ESC 키로 모달 닫기 기능 추가
+    function setupGlobalModalKeyListener() {
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const visibleModal = document.querySelector('.modal-overlay.visible');
+                if (visibleModal) {
+                    const hideModal = (modalEl) => {
+                        document.body.classList.remove('modal-open');
+                        modalEl.classList.remove('visible');
+                        modalEl.setAttribute('aria-hidden', 'true');
+                    };
+                    hideModal(visibleModal);
+                }
+            }
+        });
+    }
+
     function init() {
         const initialTelecomOrder = ['SK', 'LG', 'KT', 'SKB', 'Skylife', 'HelloVision'];
         
         initialTelecomOrder.forEach(key => {
-            if (telecomData[key]) { // 데이터가 존재하는지 확인
+            if (telecomData[key]) {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn'; btn.dataset.key = key;
                 btn.innerHTML = `<span class="item-name">${telecomData[key].name || key}</span>`;
@@ -711,7 +728,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
         
-        // 첫 번째 통신사로 초기화
         if (initialTelecomOrder.length > 0 && telecomData[initialTelecomOrder[0]]) {
             handleTelecomClick(initialTelecomOrder[0]);
         }
@@ -724,6 +740,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         setupSecretBenefitModal();
         setupAffiliateCardLink();
         setupQuickSignupModal();
+        setupGlobalModalKeyListener(); // [개선] ESC 키 리스너 실행
     }
     
     init();
