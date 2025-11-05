@@ -1,4 +1,3 @@
-// js/main-calculator.js (최종 완성본)
 import { getFullData } from './data-service.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -10,7 +9,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // --- 모든 UI 및 계산기 로직 시작 ---
     const els = {
         telecomCont: document.getElementById('telecom-options-simple'),
         internetCont: document.getElementById('internet-options-simple'),
@@ -497,46 +495,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     
     function setupQuickMenu() {
-        const quickMenuContainer = document.querySelector('.quick-menu-container');
-        const quickMenuToggle = document.querySelector('.quick-menu-toggle');
-        const quickMenuPanel = document.querySelector('.quick-menu-panel');
-        if (!quickMenuContainer || !quickMenuToggle || !quickMenuPanel) return;
+        const openBtn = document.getElementById('quick-menu-header-btn');
+        const closeBtn = document.getElementById('quick-menu-close-btn');
+        const panel = document.getElementById('quick-menu-panel');
+        
+        if (!openBtn || !closeBtn || !panel) return;
 
-        const panelToggleArrow = quickMenuPanel.querySelector('.toggle-arrow');
-        const iconItems = quickMenuToggle.querySelectorAll('.icon-item');
-        const selfSignupBtnIcon = quickMenuToggle.querySelector('.icon-item[data-action="self-signup"]');
-        const selfSignupBtnInPanel = quickMenuPanel.querySelector('#quick-self-signup-btn');
-
-        const toggleMenu = (forceState) => {
-            quickMenuContainer.classList.toggle('is-open', forceState);
+        const toggleMenu = (isOpen) => {
+            panel.classList.toggle('is-open', isOpen);
         };
 
-        quickMenuToggle.addEventListener('click', () => toggleMenu(true));
-        if (panelToggleArrow) panelToggleArrow.addEventListener('click', () => toggleMenu(false));
-        
-        iconItems.forEach(item => {
-            if (item.dataset.action === 'self-signup') return;
-            item.addEventListener('click', (e) => {
-                if (item.getAttribute('target') !== '_blank') e.preventDefault();
-                switch (item.dataset.action) {
-                    case 'secret-benefit': document.getElementById('quick-secret-benefit-btn').click(); break;
-                    case 'ai-finder': document.getElementById('quick-ai-finder-btn').click(); break;
-                    case 'kakao': window.open(item.href, '_blank'); break;
-                }
-            });
-        });
+        openBtn.addEventListener('click', () => toggleMenu(true));
+        closeBtn.addEventListener('click', () => toggleMenu(false));
 
+        const selfSignupBtnInPanel = document.getElementById('quick-self-signup-btn');
         const openQuickSignupModal = (e) => {
             e.preventDefault();
             const modal = document.getElementById('quick-signup-modal');
-            document.body.classList.add('modal-open');
-            modal.classList.add('visible');
-            modal.setAttribute('aria-hidden', 'false');
-            modal.dispatchEvent(new CustomEvent('initialize'));
-            if (quickMenuContainer.classList.contains('is-open')) toggleMenu(false);
+            if (modal) {
+                document.body.classList.add('modal-open');
+                modal.classList.add('visible');
+                modal.setAttribute('aria-hidden', 'false');
+                modal.dispatchEvent(new CustomEvent('initialize'));
+                toggleMenu(false);
+            }
         };
-
-        if (selfSignupBtnIcon) selfSignupBtnIcon.addEventListener('click', openQuickSignupModal);
         if (selfSignupBtnInPanel) selfSignupBtnInPanel.addEventListener('click', openQuickSignupModal);
         
         let touchStartX = 0, touchStartY = 0;
@@ -549,8 +532,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const deltaX = e.changedTouches[0].screenX - touchStartX;
             const deltaY = e.changedTouches[0].screenY - touchStartY;
             if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                if (deltaX < -swipeThreshold && !quickMenuContainer.classList.contains('is-open') && touchStartX > window.innerWidth * 0.75) toggleMenu(true);
-                if (deltaX > swipeThreshold && quickMenuContainer.classList.contains('is-open')) toggleMenu(false);
+                if (deltaX < -swipeThreshold && !panel.classList.contains('is-open') && touchStartX > window.innerWidth * 0.75) toggleMenu(true);
+                if (deltaX > swipeThreshold && panel.classList.contains('is-open')) toggleMenu(false);
             }
         });
     }
