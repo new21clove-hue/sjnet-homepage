@@ -17,7 +17,7 @@
     --kakao-color: #FFDE00;
     --ai-color: #ffc107;
     --danger-color: #dc3545;
-    --ryan-size: 40px; /* 라이언 크기 변수 추가 */
+    --ryan-size: 40px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1006,8 +1006,6 @@ input.invalid {
     opacity: 0;
     transform: translate(10px, -50%);
 }
-/* ... 기존 CSS 코드들 ... */
-
 
 /* --- [추가] 제휴카드 모달 스타일 --- */
 .modal-body .modal-header h2 i {
@@ -1155,6 +1153,14 @@ input.invalid {
 }
 .qs-options-container .option-btn .item-price {
     font-size: 0.85em;
+}
+/* [개선] 간편 신청 모달의 선택된 버튼 스타일 추가 */
+.qs-options-container .option-btn.selected {
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
 }
 .qs-additional-options {
     display: grid;
