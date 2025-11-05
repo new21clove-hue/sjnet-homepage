@@ -1,17 +1,14 @@
 import { getFullData } from './data-service.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // 데이터베이스에서 전체 데이터를 비동기적으로 불러옵니다.
     const telecomDataFromDB = await getFullData();
 
-    // 데이터를 불러오지 못하면 AI 플래너 기능을 비활성화하거나 에러 메시지를 표시합니다.
     if (!telecomDataFromDB) {
         const aiContainer = document.querySelector('.ai-calculator-body');
         if(aiContainer) aiContainer.innerHTML = '<p style="text-align:center; color:red; font-weight:bold;">[오류] AI 플래너 정보를 불러오는 데 실패했습니다. 페이지를 새로고침하거나 관리자에게 문의하세요.</p>';
         return;
     }
 
-    // --- 여기서부터 AI 계산기 로직 시작 ---
     const aiCalcBody = document.querySelector('.ai-calculator-body');
     if (!aiCalcBody) return;
 
@@ -21,18 +18,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         "20000": { name: '3만원 미만 요금제', price: 20000 }, "30000": { name: '3만원대 요금제', price: 35000 }, "40000": { name: '4만원대 요금제', price: 45000 }, "50000": { name: '5만원대 요금제', price: 55000 }, "60000": { name: '6만원대 요금제', price: 65000 }, "70000": { name: '7만원대 요금제', price: 75000 }, "80000": { name: '8만원 이상 요금제', price: 90000 }
     };
     
-    // DB에서 받은 데이터로 telecomData를 재구성합니다. AI 계산기에 필요한 형태로 가공합니다.
     const telecomData = {};
     for (const key in telecomDataFromDB) {
         const original = telecomDataFromDB[key];
         telecomData[key] = {
             name: original.name,
             color: original.color,
-            internet: original.internet.map(p => ({ id: p.id, name: p.name.split(' ')[0], price: p.price })),
-            tv: original.tv.map(p => ({ id: p.id || (p.name.toLowerCase().includes('basic') || p.name.toLowerCase().includes('이코노미') ? 'basic' : 'premium'), name: p.name.split('(')[0].trim(), price: p.price })),
+            internet: (original.internet || []).map(p => ({ id: p.id, name: p.name.split(' ')[0], price: p.price })),
+            tv: (original.tv || []).map(p => ({ id: p.id || (p.name.toLowerCase().includes('basic') || p.name.toLowerCase().includes('이코노미') ? 'basic' : 'premium'), name: p.name.split('(')[0].trim(), price: p.price })),
             additionalTv: {
-                basic: original.additionalTv.find(p => p.name.toLowerCase().includes('basic') || p.name.toLowerCase().includes('180') || p.name.toLowerCase().includes('이코노미'))?.price || 0,
-                premium: original.additionalTv.find(p => p.name.toLowerCase().includes('premium') || p.name.toLowerCase().includes('all') || p.name.toLowerCase().includes('230') || p.name.toLowerCase().includes('에센스'))?.price || 0,
+                // [수정] (original.additionalTv || []) 로 안전하게 변경
+                basic: (original.additionalTv || []).find(p => p.name.toLowerCase().includes('basic') || p.name.toLowerCase().includes('180') || p.name.toLowerCase().includes('이코노미'))?.price || 0,
+                premium: (original.additionalTv || []).find(p => p.name.toLowerCase().includes('premium') || p.name.toLowerCase().includes('all') || p.name.toLowerCase().includes('230') || p.name.toLowerCase().includes('에센스'))?.price || 0,
             },
             combinedProducts: original.combinedProducts,
             cashBenefits: {
@@ -52,6 +49,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
     }
 
+    // ... (이후의 모든 코드는 이전과 동일합니다. 전체를 복사해서 붙여넣으세요) ...
+    
     const LG_TOGETHER_DISCOUNT = { 2: 10000, 3: 14000, 4: 20000, 5: 20000 };
     const LG_TOGETHER_YOUTH_ADDITIONAL_DISCOUNT = 10000;
     const LG_MOBILE_DISCOUNT_MATRIX = { 1: [0, 0, 0], 2: [2200, 3300, 4400], 3: [3300, 5500, 6600], 4: [4400, 6600, 8800], 5: [4400, 6600, 8800] };
