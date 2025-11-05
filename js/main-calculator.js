@@ -1,3 +1,4 @@
+// js/main-calculator.js (최종 완성본)
 import { getFullData } from './data-service.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const fmt = (n) => (n || 0).toLocaleString('ko-KR');
 
     function updateCalculations() {
+        if (!state.telecom) return;
         let intPrice = state.internet?.price || 0;
         let tvPrice = state.tv?.price || 0;
         const settopPrice = state.settop?.price || 0;
@@ -55,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const savedConfig = localStorage.getItem(GIFT_CONFIG_KEY);
         const giftConfig = savedConfig ? JSON.parse(savedConfig) : {};
         
-        if (state.telecom && giftConfig[state.telecom]) {
+        if (giftConfig[state.telecom]) {
             const config = giftConfig[state.telecom];
             supportFund += config.base || 0;
             if (state.internet) {
@@ -204,10 +206,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const containers = [els.internetCont, els.tvCont, els.settopCont, els.additionalTvCont, els.combinedCont];
         containers.forEach(c => c.innerHTML = '');
 
-        data.internet?.forEach(item => els.internetCont.appendChild(createOptionButton('internet', item, telecomKey)));
-        data.tv?.forEach(item => els.tvCont.appendChild(createOptionButton('tv', item, telecomKey)));
-        data.settop?.forEach(item => els.settopCont.appendChild(createOptionButton('settop', item, telecomKey)));
-        data.additionalTv?.forEach(item => els.additionalTvCont.appendChild(createOptionButton('additionalTv', item, telecomKey)));
+        // [수정] 데이터가 없어도 오류가 나지 않도록 || [] 추가
+        (data.internet || []).forEach(item => els.internetCont.appendChild(createOptionButton('internet', item, telecomKey)));
+        (data.tv || []).forEach(item => els.tvCont.appendChild(createOptionButton('tv', item, telecomKey)));
+        (data.settop || []).forEach(item => els.settopCont.appendChild(createOptionButton('settop', item, telecomKey)));
+        (data.additionalTv || []).forEach(item => els.additionalTvCont.appendChild(createOptionButton('additionalTv', item, telecomKey)));
         
         const noBundleOption = (telecomKey === 'SKB') ? [] : [{ name: '결합없음', price: 0, id: 'no_bundle' }];
         if (data.combinedProducts) {
@@ -241,7 +244,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (state.settop) document.querySelector(`#settop-options-simple .option-btn[data-name="${state.settop.name}"]`)?.classList.add('selected');
         if (state.combinedProduct) document.querySelector(`#combined-options-simple .option-btn[data-name="${state.combinedProduct.name}"]`)?.classList.add('selected');
         els.detailFeeSummary.style.display = 'none';
-        els.toggleDetailFeeLink.textContent = '상세요금 >';
+        if (els.toggleDetailFeeLink) els.toggleDetailFeeLink.textContent = '상세요금 >';
         updateCalculations();
     }
     
@@ -275,6 +278,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     
     function setupDetailFeeToggle() {
+        if (!els.toggleDetailFeeLink) return;
         els.toggleDetailFeeLink.addEventListener('click', (e) => {
             e.preventDefault();
             const isHidden = els.detailFeeSummary.style.display === 'none' || els.detailFeeSummary.style.display === '';
@@ -289,7 +293,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (els.summaryToggleDetails) {
             els.summaryToggleDetails.addEventListener('click', (e) => {
                 e.preventDefault();
-                els.toggleDetailFeeLink.click(); 
+                if (els.toggleDetailFeeLink) els.toggleDetailFeeLink.click(); 
                 document.querySelector('.quote-panel')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             });
         }
@@ -331,6 +335,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function setupSecretBenefitModal() {
         const quickSecretBenefitBtn = document.getElementById('quick-secret-benefit-btn');
         const modalOverlay = document.getElementById('secret-benefit-modal');
+        if (!modalOverlay) return;
         const form = document.getElementById('benefit-apply-form');
         const nameInput = document.getElementById('benefit-name');
         const phoneInput = document.getElementById('benefit-phone');
@@ -340,8 +345,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const customAlert = document.getElementById('custom-alert');
         const productBtns = modalOverlay.querySelectorAll('.product-btn');
 
-        if (!modalOverlay || !form) return;
-        
         const showModal = (modalEl) => {
             document.body.classList.add('modal-open');
             modalEl.classList.add('visible');
@@ -481,19 +484,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
 
-        customAlert.addEventListener('click', (e) => {
-            if (e.target === customAlert || e.target.id === 'alert-close-btn') {
-                hideModal(customAlert);
-            } else if (e.target.id === 'alert-signup-btn') {
-                hideModal(customAlert);
-                document.getElementById('calculator-section').scrollIntoView({ behavior: 'smooth' });
-            }
-        });
+        if (customAlert) {
+            customAlert.addEventListener('click', (e) => {
+                if (e.target === customAlert || e.target.id === 'alert-close-btn') {
+                    hideModal(customAlert);
+                } else if (e.target.id === 'alert-signup-btn') {
+                    hideModal(customAlert);
+                    document.getElementById('calculator-section').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        }
     }
     
     function setupQuickMenu() {
         const quickMenuContainer = document.querySelector('.quick-menu-container');
         const quickMenuToggle = document.querySelector('.quick-menu-toggle');
+        if (!quickMenuContainer || !quickMenuToggle) return;
         const iconItems = document.querySelectorAll('.icon-item');
         const panelToggleArrow = document.querySelector('.quick-menu-panel .toggle-arrow');
         const selfSignupBtnIcon = document.querySelector('.icon-item[data-action="self-signup"]');
@@ -503,7 +509,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             quickMenuContainer.classList.toggle('is-open', forceState);
         };
 
-        if (quickMenuToggle) quickMenuToggle.addEventListener('click', () => toggleMenu());
+        quickMenuToggle.addEventListener('click', () => toggleMenu());
         if (panelToggleArrow) panelToggleArrow.addEventListener('click', () => toggleMenu());
         
         iconItems.forEach(item => {
@@ -609,24 +615,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             btn.className = 'option-btn';
             btn.textContent = item.name.split('(')[0].trim();
             btn.dataset.name = item.name;
-            // [개선] item.key를 dataset에 추가
             btn.dataset.key = item.key || item.id;
 
             btn.onclick = () => {
-                const wasSelected = btn.classList.contains('selected');
-                
-                // [개선] 모든 버튼에서 selected 클래스 제거
                 container.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-
-                if (wasSelected && type !== 'telecom') {
-                    quickSignupState[type] = null;
-                    if(type === 'tv') container.querySelector('.no-tv-btn')?.classList.add('selected');
-                } else {
-                    btn.classList.add('selected'); // [개선] 현재 버튼에 selected 클래스 추가
-                    quickSignupState[type] = item;
-                    if (type === 'telecom') renderSubOptions(item.key);
-                    if (type === 'tv') container.querySelector('.no-tv-btn')?.classList.remove('selected');
-                }
+                btn.classList.add('selected');
+                quickSignupState[type] = item;
+                if (type === 'telecom') renderSubOptions(item.key);
+                if (type === 'tv') container.querySelector('.no-tv-btn')?.classList.remove('selected');
             };
             container.appendChild(btn);
         };
@@ -698,7 +694,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
     }
 
-    // [개선] ESC 키로 모달 닫기 기능 추가
     function setupGlobalModalKeyListener() {
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
@@ -740,7 +735,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         setupSecretBenefitModal();
         setupAffiliateCardLink();
         setupQuickSignupModal();
-        setupGlobalModalKeyListener(); // [개선] ESC 키 리스너 실행
+        setupGlobalModalKeyListener();
     }
     
     init();
