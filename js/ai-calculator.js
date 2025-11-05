@@ -1,3 +1,4 @@
+// js/ai-calculator.js (최종 완성본)
 import { getFullData } from './data-service.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -27,7 +28,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             internet: (original.internet || []).map(p => ({ id: p.id, name: p.name.split(' ')[0], price: p.price })),
             tv: (original.tv || []).map(p => ({ id: p.id || (p.name.toLowerCase().includes('basic') || p.name.toLowerCase().includes('이코노미') ? 'basic' : 'premium'), name: p.name.split('(')[0].trim(), price: p.price })),
             additionalTv: {
-                // [수정] (original.additionalTv || []) 로 안전하게 변경
                 basic: (original.additionalTv || []).find(p => p.name.toLowerCase().includes('basic') || p.name.toLowerCase().includes('180') || p.name.toLowerCase().includes('이코노미'))?.price || 0,
                 premium: (original.additionalTv || []).find(p => p.name.toLowerCase().includes('premium') || p.name.toLowerCase().includes('all') || p.name.toLowerCase().includes('230') || p.name.toLowerCase().includes('에센스'))?.price || 0,
             },
@@ -48,8 +48,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             mobileDiscounts: original.mobileDiscounts
         };
     }
-
-    // ... (이후의 모든 코드는 이전과 동일합니다. 전체를 복사해서 붙여넣으세요) ...
     
     const LG_TOGETHER_DISCOUNT = { 2: 10000, 3: 14000, 4: 20000, 5: 20000 };
     const LG_TOGETHER_YOUTH_ADDITIONAL_DISCOUNT = 10000;
@@ -389,36 +387,41 @@ document.addEventListener('DOMContentLoaded', async () => {
         return 'signup.html?' + new URLSearchParams(cleanedParams).toString();
     }
 
-    document.querySelector('.results-container').addEventListener('click', (e) => {
-        if (e.target.classList.contains('detail-link') && e.target.tagName === 'BUTTON') {
-            const resultId = e.target.dataset.resultId;
-            const resultData = allResultsData.find(r => r.id === resultId);
-            if (resultData) openModal(resultData, 'detail');
-        } else if (e.target.classList.contains('signup-link')) {
-            e.preventDefault();
-            const resultId = e.target.dataset.resultId;
-            window.location.href = generateSignupUrl(resultId);
-        }
-    });
-
-    modalOverlay.addEventListener('click', (e) => {
-        if (e.target.classList.contains('modal-close-btn') || e.target.classList.contains('btn-close')) {
-            closeModal();
-        } else if (e.target.id === 'modal-consult-btn') {
-            openModal(currentResultForModal, 'form');
-        } else if (e.target.id === 'submit-consult-form') {
-            const form = document.getElementById('consult-form');
-            if (form.checkValidity()) {
-                alert('상담 신청이 완료되었습니다. 곧 연락드리겠습니다.');
-                closeModal();
-            } else {
-                form.reportValidity();
+    // [수정] modalOverlay가 존재할 때만 이벤트 리스너를 추가하도록 변경
+    if (document.querySelector('.results-container')) {
+        document.querySelector('.results-container').addEventListener('click', (e) => {
+            if (e.target.classList.contains('detail-link') && e.target.tagName === 'BUTTON') {
+                const resultId = e.target.dataset.resultId;
+                const resultData = allResultsData.find(r => r.id === resultId);
+                if (resultData) openModal(resultData, 'detail');
+            } else if (e.target.classList.contains('signup-link')) {
+                e.preventDefault();
+                const resultId = e.target.dataset.resultId;
+                window.location.href = generateSignupUrl(resultId);
             }
-        } else if (e.target.classList.contains('signup-link')) {
-             e.preventDefault();
-             window.location.href = generateSignupUrl(currentResultForModal.id);
-        } else if (e.target === modalOverlay) {
-            closeModal();
-        }
-    });
+        });
+    }
+
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-close-btn') || e.target.classList.contains('btn-close')) {
+                closeModal();
+            } else if (e.target.id === 'modal-consult-btn') {
+                openModal(currentResultForModal, 'form');
+            } else if (e.target.id === 'submit-consult-form') {
+                const form = document.getElementById('consult-form');
+                if (form.checkValidity()) {
+                    alert('상담 신청이 완료되었습니다. 곧 연락드리겠습니다.');
+                    closeModal();
+                } else {
+                    form.reportValidity();
+                }
+            } else if (e.target.classList.contains('signup-link')) {
+                 e.preventDefault();
+                 window.location.href = generateSignupUrl(currentResultForModal.id);
+            } else if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+    }
 });
