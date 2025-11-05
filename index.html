@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성지넷 - 인터넷 TV 가입센터</title>
+    
+    <!-- ======== 카카오톡 공유 미리보기 설정 ======== -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://new21c.dothome.co.kr/">
+    <meta property="og:title" content="성지넷 - 인터넷 TV 가입센터">
+    <meta property="og:image" content="ai_ryan.png">
+    <meta property="og:description" content="AI 스마트플래너로 우리 가족에게 딱 맞는 최적의 요금제를 찾아보세요!">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- CSS 파일 연결 -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="sticky-header-container">
+        <header>
+            <div class="header-top">
+                <div class="logo"><a href="#" id="logo-link" aria-label="성지넷 홈으로">성지넷</a></div>
+                <div class="header-character-container">
+                    <img src="apeach.gif" alt="걷는 어피치" class="header-walking-character">
+                </div>
+                <div class="contact-info">
+                    <a href="tel:1644-6780" class="tel" aria-label="전화 상담 1644-6780"><i class="fas fa-phone-volume"></i> 1644-6780</a>
+                </div>
+            </div>
+            <a href="#" class="ai-calculator-link-header" id="ai-calculator-header-link">
+                <img src="aiplan.png" alt="AI 스마트플래너 아이콘" class="ai-icon"> AI 스마트플래너
+                <span class="click-indicator">CLICK</span>
+            </a>
+        </header>
+        <nav class="category-nav">
+            <div class="container">
+                <ul>
+                    <li><a href="#calculator-section" data-carrier="SK" aria-label="SK 요금 계산기로 이동">SK</a></li>
+                    <li><a href="#calculator-section" data-carrier="LG" aria-label="LG U+ 요금 계산기로 이동">LG U+</a></li>
+                    <li><a href="#calculator-section" data-carrier="KT" aria-label="KT 요금 계산기로 이동">KT</a></li>
+                    <li><a href="#calculator-section" data-carrier="SKB" aria-label="B알뜰 요금 계산기로 이동">B알뜰</a></li>
+                    <li><a href="#calculator-section" data-carrier="Skylife" aria-label="skylife 요금 계산기로 이동">skylife</a></li>
+                    <li><a href="#calculator-section" data-carrier="HelloVision" aria-label="Hello 요금 계산기로 이동">Hello</a></li>
+                    <li><a href="#" id="affiliate-card-link">제휴카드</a></li>
+                    <li><a href="#" id="ai-calculator-nav-link" aria-label="AI 스마트플래너로 이동"><span class="icon-wrapper"></span>AI 스마트플래너</a></li>
+                    <li><a href="#" id="secret-benefit-link" aria-label="비밀혜택 신청하기">쉿! 비밀혜택</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    
+    <div id="main-content-wrapper">
+        <main>
+            <section class="hero">
+                <div class="container">
+                    <h1>“가입은 성지에서, 선택은 더 스마트하게.”</h1>
+                    <p>통신사별 최적 요금안을 한 번에, 성지AI가 대신 비교해드립니다</p>
+                    <a href="#calculator-section" class="btn-primary">나에게 맞는 요금제 찾기</a>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <div class="trust-elements">
+                        <div class="trust-element">
+                            <div class="icon">🏆</div>
+                            <h3>“합리적인 선택의 마지막 목적지, 성지.”</h3>
+                            <p>“최저요금 · 최대사은품 · 비밀지원 혜택까지 한 곳에서.”</p>
+                        </div>
+                        <div class="trust-element">
+                            <div class="icon">💰</div>
+                            <h3>“국내 최초, AI가 찾아주는 최대혜택.”</h3>
+                            <p>정확한 요금 분석과 숨은 혜택 비교까지 <br> 국내 유일 성지 AI 설계 시스템.</p>
+                        </div>
+                        <div class="trust-element">
+                            <div class="icon">🕒</div>
+                            <h3>365일 24시간 상담</h3>
+                            <p>언제나 편한 시간에 AI컨설팅</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="telecom-slider">
+                <div class="slide-track">
+                    <a href="#calculator-section" data-carrier="SK" class="telecom-card"><div class="logo-placeholder logo-sk">SK</div><p>SK</p></a>
+                    <a href="#calculator-section" data-carrier="LG" class="telecom-card"><div class="logo-placeholder logo-lg">LG U+</div><p>LG U+</p></a>
+                    <a href="#calculator-section" data-carrier="KT" class="telecom-card">
+                        <div class="logo-placeholder logo-kt">
+                            <img src="kt_logo.png" alt="KT 로고">
+                        </div>
+                        <p>KT</p>
+                    </a>
+                    <a href="#calculator-section" data-carrier="SKB" class="telecom-card">
+                        <div class="logo-placeholder logo-skb">
+                            <img src="b_logo.png" alt="B알뜰 로고">
+                        </div>
+                        <p>SK(알뜰)</p>
+                    </a>
+                    <a href="#calculator-section" data-carrier="Skylife" class="telecom-card"><div class="logo-placeholder logo-skylife"><span class="kt">kt</span> <span class="sky">skylife</span></div><p>SkyLife</p></a>
+                    <a href="#calculator-section" data-carrier="HelloVision" class="telecom-card"><div class="logo-placeholder logo-hello">Hello</div><p>LG헬로비전</p></a>
+                    
+                    <a href="#calculator-section" data-carrier="SK" class="telecom-card"><div class="logo-placeholder logo-sk">SK</div><p>SK</p></a>
+                    <a href="#calculator-section" data-carrier="LG" class="telecom-card"><div class="logo-placeholder logo-lg">LG U+</div><p>LG U+</p></a>
+                    <a href="#calculator-section" data-carrier="KT" class="telecom-card">
+                        <div class="logo-placeholder logo-kt">
+                            <img src="kt_logo.png" alt="KT 로고">
+                        </div>
+                        <p>KT</p>
+                    </a>
+                    <a href="#calculator-section" data-carrier="SKB" class="telecom-card">
+                        <div class="logo-placeholder logo-skb">
+                            <img src="b_logo.png" alt="B알뜰 로고">
+                        </div>
+                        <p>SK(알뜰)</p>
+                    </a>
+                    <a href="#calculator-section" data-carrier="Skylife" class="telecom-card"><div class="logo-placeholder logo-skylife"><span class="kt">kt</span> <span class="sky">skylife</span></div><p>SkyLife</p></a>
+                    <a href="#calculator-section" data-carrier="HelloVision" class="telecom-card"><div class="logo-placeholder logo-hello">Hello</div><p>LG헬로비전</p></a>
+                </div>
+            </div>
+        </main>
+        
+        <section id="calculator-section">
+            <div class="calculator-wrapper">
+                <div class="selection-panel">
+                    <div class="calc-section">
+                        <h2 class="calc-title">통신사 선택</h2>
+                        <div id="telecom-options-simple" class="options-container"></div>
+                    </div>
+                    <div class="calc-section">
+                        <h2 class="calc-title">인터넷 상품</h2>
+                        <div id="internet-options-simple" class="options-container product-options"></div>
+                    </div>
+                    <div class="calc-section">
+                        <h2 class="calc-title">TV 상품</h2>
+                        <div id="tv-options-simple" class="options-container product-options"></div>
+                    </div>
+                    <div class="calc-section">
+                        <h2 class="calc-title">셋탑박스</h2>
+                        <div id="settop-options-simple" class="options-container product-options"></div>
+                    </div>
+                    <div class="calc-section">
+                        <h2 class="calc-title">TV 추가</h2>
+                        <div id="additional-tv-options-simple" class="options-container product-options"></div>
+                    </div>
+                    <div class="calc-section">
+                        <h2 class="calc-title">결합상품명</h2>
+                        <div id="combined-options-simple" class="options-container product-options"></div>
+                    </div>
+                </div>
+
+                <div class="quote-panel">
+                    <div class="quote-header">
+                        <img src="//new21c.dothome.co.kr/sj_logo.jpg" alt="성지넷 로고">
+                        <span class="title">실시간 맞춤 견적서</span>
+                    </div>
+                    <div class="quote-body">
+                        <div class="fee-details">
+                            <div class="fee-row">
+                                <span class="fee-label">기본 요금</span>
+                                <span class="fee-amount" id="base-fee">0원</span>
+                            </div>
+                            <div class="fee-row">
+                                <span class="fee-label" id="combined-fee-label">휴대폰 결합 요금</span>
+                                <span class="fee-amount" id="combined-fee">0원</span>
+                            </div>
+                            <div class="fee-row final-fee">
+                                <span class="fee-label">휴대폰 결합+카드할인 혜택가 <span class="vat-included">부가세 포함</span></span>
+                                <span class="fee-amount" id="total-price">0원</span>
+                            </div>
+                            
+                            <div class="support-details-line">
+                                <div class="support-total">
+                                    <span class="label"><i class="fas fa-gift"></i> 현금 사은품</span>
+                                    <span class="amount" id="total-support-fund">0원</span>
+                                </div>
+                                <a href="#" class="details-link" id="toggle-detail-fee">상세요금 <i class="fas fa-chevron-right"></i></a>
+                            </div>
+                        
+                            <div id="detail-fee-summary" class="detail-fee-summary">
+                                <h4>월 예상 납부 금액</h4>
+                                <div id="detail-summary-content">
+                                </div>
+                            </div>
+
+                            <div class="button-group-quote">
+                                <a href="signup.html" class="btn btn-outline" id="self-signup-btn-quote"><i class="fas fa-desktop"></i> 셀프 가입</a>
+                                <a href="tel:1644-6780" class="btn btn-primary"><i class="fas fa-phone"></i> 바로 상담</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <div id="ai-view-wrapper" style="display: none;">
+        <div class="ai-calculator-body">
+            <div class="ai-grid-container">
+                <div class="ai-consultant-column">
+                    <div class="ai-consultant-image-container">
+                        <video id="planner-video" src="assets/wplanner.mp4" autoplay muted playsinline></video>
+                    </div>
+                </div>
+                <div class="ai-form-column">
+                    <div class="input-container">
+                        <h1>AI 스마트플래너</h1>
+                        <p>가족의 통신 생활에 맞춰 최적의 조합을 찾아드려요.</p>
+                        <div class="input-group">
+                            <h3><i class="fas fa-wifi"></i>인터넷 속도</h3>
+                            <div class="option-buttons" id="internet-selector">
+                                <button data-value="100" data-name="100M">100M</button>
+                                <button data-value="500" data-name="500M" class="selected">500M</button>
+                                <button data-value="1000" data-name="1G">1G</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <h3><i class="fas fa-tv"></i>TV 상품</h3>
+                            <div class="option-buttons" id="tv-selector">
+                                <button data-value="none" data-name="TV 없음">미신청</button>
+                                <button data-value="basic" data-name="기본 채널" class="selected">베이직</button>
+                                <button data-value="premium" data-name="고급 채널">프리미엄</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <h3><i class="fas fa-plus-square"></i>TV 추가</h3>
+                            <div class="option-buttons" id="additional-tv-selector">
+                                <button data-value="0" class="selected">없음</button>
+                                <button data-value="1">1대</button>
+                                <button data-value="2">2대</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <h3><i class="fas fa-mobile-alt"></i>결합 휴대폰</h3>
+                            <div class="option-buttons" id="mobile-combination-selector" style="grid-template-columns: 1fr 1fr;">
+                                <button data-value="yes" class="selected">결합함</button>
+                                <button data-value="no">결합 안함</button>
+                            </div>
+                            <div id="mobile-details-wrapper" style="margin-top: 20px;">
+                                <div id="mobile-list">
+                                    <div class="mobile-entry">
+                                        <label>본인</label>
+                                        <select class="mobile-plan-tier">
+                                            <option value="20000">3만원 미만</option><option value="30000">3만원대</option><option value="40000">4만원대</option><option value="50000">5만원대</option><option value="60000">6만원대</option><option value="70000">7만원대</option><option value="80000" selected>8만원 이상</option>
+                                        </select>
+                                        <div class="mobile-entry-options">
+                                            <label class="toggle-switch">
+                                                청소년
+                                                <input type="checkbox" class="youth-checkbox">
+                                                <span class="slider"></span>
+                                            </label>
+                                            <label class="toggle-switch">
+                                                유심
+                                                <input type="checkbox" class="usim-checkbox">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="action-buttons"><button id="add-mobile-btn"><i class="fas fa-plus"></i> 가족 추가</button></div>
+                            </div>
+                        </div>
+                        <button id="calculate-btn"><i class="fas fa-calculator"></i> 최대 혜택 계산</button>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="container">
+                 <div class="results-wrapper">
+                    <div id="loader"><div class="spinner"></div><p>모든 통신사의 결합상품을 비교하여<br>최적의 요금제를 찾고 있습니다. 잠시만 기다려주세요...</p></div>
+                    <div class="results-container">
+                        <div class="result-category">
+                            <h2>💰 월 최저 요금 TOP 3</h2>
+                            <div id="lowest-bill-results" class="result-grid"></div>
+                        </div>
+                        <div class="result-category">
+                            <h2>🎁 최대 총 혜택 TOP 3</h2>
+                            <div id="highest-benefit-results" class="result-grid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer><div class="container"><p>&copy; 2024 성지넷. All Rights Reserved.</p></div></footer>
+    
+    <div class="summary-sticky-bar">
+        <div class="summary-sticky-bar-content">
+            <div class="sticky-info-top">
+                <div class="summary-fees">
+                    <div class="fee-line">
+                        <span class="label">기본 요금</span>
+                        <span class="amount" id="summary-base-fee">0원</span>
+                    </div>
+                    <div class="fee-line">
+                        <span class="label" id="summary-combined-fee-label">휴대폰 결합 요금</span>
+                        <span class="amount" id="summary-combined-fee">0원</span>
+                    </div>
+                    <div class="fee-line final">
+                        <span class="label">월 납부액<span class="vat-info">(카드할인 포함)</span></span>
+                        <span class="amount" id="summary-total-price">0원</span>
+                    </div>
+                </div>
+                <div class="support-info">
+                    <span class="support-label"><i class="fas fa-gift"></i> 현금 사은품</span>
+                    <span class="support-amount" id="summary-total-support">0원</span>
+                    <a href="#" class="details-link-sticky" id="summary-toggle-details">상세요금 <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            <div class="summary-actions">
+                <div class="button-group">
+                    <a href="#" class="btn btn-outline" id="summary-self-signup-btn"><i class="fas fa-pencil-alt"></i> 셀프 가입</a>
+                    <a href="https://pf.kakao.com/_pqxnxmT" target="_blank" class="btn btn-kakao">
+                        <div class="kakao-character-container">
+                           <img src="ryan.png" alt="걷는 캐릭터" class="kakao-walking-character">
+                        </div>
+                        카톡 상담
+                    </a>
+                    <a href="tel:1644-6780" class="btn btn-primary"><i class="fas fa-phone"></i> 바로 상담</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="detail-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <button class="modal-close-btn" id="modal-close-btn-header" aria-label="닫기">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body-content">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="secret-benefit-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content large">
+            <button class="modal-close-btn" aria-label="닫기">&times;</button>
+            <div class="secret-benefit-content">
+                <div class="benefit-visual">
+                    <h2>성지넷 비밀혜택<br>문자 받아 보기</h2>
+                    <video src="assets/wplanner.mp4" autoplay muted playsinline></video>
+                </div>
+                <div class="benefit-form">
+                    <div class="form-product-selection">
+                        <button class="product-btn selected"><i class="fas fa-wifi"></i><span>인터넷</span></button>
+                        <button class="product-btn"><i class="fas fa-tv"></i><span>TV</span></button>
+                        <button class="product-btn"><i class="fas fa-sim-card"></i><span>유심</span></button>
+                        <button class="product-btn"><i class="fas fa-mobile-alt"></i><span>휴대폰</span></button>
+                    </div>
+                    <form id="benefit-apply-form" novalidate>
+                        <div class="form-group-validation">
+                            <input type="text" id="benefit-name" placeholder="이름을 입력해주세요" required>
+                            <div class="validation-message"></div>
+                        </div>
+                        <div class="form-group-validation">
+                            <input type="tel" id="benefit-phone" placeholder="연락처를 -없이 입력해주세요" required>
+                            <div class="validation-message"></div>
+                        </div>
+                        <div class="consent-area">
+                            <div class="consent-header">
+                                <input type="checkbox" id="benefit-consent-all">
+                                <label for="benefit-consent-all">전체 동의</label>
+                            </div>
+                            <ul class="consent-list">
+                                <li>
+                                    <div class="consent-item-line">
+                                        <input type="checkbox" id="consent-1" class="consent-item consent-required">
+                                        <label for="consent-1">(필수) 개인정보 수집 및 활용 동의</label>
+                                        <a href="#" class="consent-toggle-arrow" aria-label="약관 상세보기">&gt;</a>
+                                    </div>
+                                    <div class="consent-detail">
+                                        <p>수집 항목: 이름, 연락처. 수집 목적: 상담 및 가입 안내. 보유 기간: 3년. 동의를 거부할 수 있으나, 거부 시 서비스 이용이 제한됩니다.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="consent-item-line">
+                                        <input type="checkbox" id="consent-2" class="consent-item consent-required">
+                                        <label for="consent-2">(필수) 개인정보 제3자 제공 및 활용 동의</label>
+                                        <a href="#" class="consent-toggle-arrow" aria-label="약관 상세보기">&gt;</a>
+                                    </div>
+                                    <div class="consent-detail">
+                                        <p>제공받는 자: 각 통신사. 제공 목적: 가입 및 설치. 제공 항목: 이름, 연락처, 주소. 보유 기간: 5년.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="consent-item-line">
+                                        <input type="checkbox" id="consent-3" class="consent-item">
+                                        <label for="consent-3">(선택) 마케팅 정보 수신 동의</label>
+                                        <a href="#" class="consent-toggle-arrow" aria-label="약관 상세보기">&gt;</a>
+                                    </div>
+                                    <div class="consent-detail">
+                                        <p>수신 목적: 신규 상품 및 이벤트 정보 안내. 수신 방법: SMS, 이메일. 동의 철회: 고객센터(1644-6780).</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <button type="submit" class="btn-submit">비밀 혜택 문자 받아 보기</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="custom-alert" class="modal-overlay" role="alertdialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content small">
+             <div class="custom-alert-body">
+                <p class="alert-icon">💌</p>
+                <p class="alert-title">비밀지원금 신청이 완료되었습니다.</p>
+                <p class="alert-message">안내를 위해 성지넷 대표번호(1644-6780)로<br>직접 전화 드려요!(평균 1일 이내)</p>
+                <p class="alert-subtitle">기다릴 필요 없이 지금 바로!</p>
+                <div class="alert-actions">
+                    <button class="btn btn-primary-outline" id="alert-signup-btn">셀프 바로 가입</button>
+                    <button class="btn btn-secondary" id="alert-close-btn">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="affiliate-card-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2><i class="fas fa-credit-card"></i> 제휴카드 안내</h2>
+                <button class="modal-close-btn" aria-label="닫기">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="card-modal-tabs">
+                    <button class="card-tab-btn active" data-tab="sk-cards">SK</button>
+                    <button class="card-tab-btn" data-tab="lg-cards">LG U+</button>
+                    <button class="card-tab-btn" data-tab="kt-cards">KT</button>
+                </div>
+
+                <div class="card-tab-content active" id="sk-cards">
+                    <div class="card-grid">
+                        <div class="affiliate-card">
+                            <div class="card-image-placeholder"><i class="fas fa-satellite-dish"></i></div>
+                            <h3>T 우주 신한카드</h3>
+                            <div class="card-benefit">월 최대 20,000원 할인</div>
+                            <p class="card-condition">전월 실적 40만원 이상 시</p>
+                            <a href="https://www.tworld.co.kr/poc/html/product/TS3.3.3T.html" target="_blank" class="btn-card-details">자세히 보기</a>
+                        </div>
+                        <div class="affiliate-card">
+                            <div class="card-image-placeholder"><i class="fas fa-h-square"></i></div>
+                            <h3>T다운 현대카드</h3>
+                            <div class="card-benefit">월 최대 25,000원 할인</div>
+                            <p class="card-condition">전월 실적 70만원 이상 시</p>
+                            <a href="https://www.tworld.co.kr/poc/html/product/TS3.3.3T.html" target="_blank" class="btn-card-details">자세히 보기</a>
+                        </div>
+                        <div class="affiliate-card">
+                            <div class="card-image-placeholder"><i class="fas fa-k-square"></i></div>
+                            <h3>T라이트 KB국민카드</h3>
+                            <div class="card-benefit">월 최대 22,000원 할인</div>
+                            <p class="card-condition">전월 실적 80만원 이상 시</p>
+                            <a href="https://www.tworld.co.kr/poc/html/product/TS3.3.3T.html" target="_blank" class="btn-card-details">자세히 보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-tab-content" id="lg-cards">
+                    <div class="card-grid">
+                         <div class="affiliate-card">
+                            <div class="card-image-placeholder"><i class="fas fa-book-open"></i></div>
+                            <h3>LG U+ 카드의정석(우리카드)</h3>
+                            <div class="card-benefit">월 최대 25,000원 할인</div>
+                            <p class="card-condition">전월 실적 70만원 이상 시</p>
+                            <a href="https://www.lguplus.com/benefit-affiliate/card-discount" target="_blank" class="btn-card-details">자세히 보기</a>
+                        </div>
+                        <div class="affiliate-card">
+                            <div class="card-image-placeholder"><i class="fas fa-h-square"></i></div>
+                            <h3>LG U+ 현대카드M Edition3</h3>
+                            <div class="card-benefit">월 최대 20,000원 할인</div>
+                            <p class="card-condition">전월 실적 70만원 이상 시</p>
+                            <a href="https://www.lguplus.com/benefit-affiliate/card-discount" target="_blank" class="btn-card-details">자세히 보기</a>
+                        </div>
+                        <div class="affiliate-card">
+                            <div class="card-image-placeholder"><i class="fas fa-l-square"></i></div>
+                            <h3>LG U+라서 즐거운 신한카드</h3>
+                            <div class="card-benefit">월 최대 20,000원 할인</div>
+                            <p class="card-condition">전월 실적 70만원 이상 시</p>
+                            <a href="https://www.lguplus.com/benefit-affiliate/card-discount" target="_blank" class="btn-card-details">자세히 보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-tab-content" id="kt-cards">
+                    <div class="card-grid">
+                        <div class="affiliate-card">
+                            <div class="card-image-placeholder"><i class="fas fa-plus-circle"></i></div>
+                            <h3>KT NU Plus 우리카드</h3>
+                            <div class="card-benefit">월 최대 26,000원 할인</div>
+                            <p class="card-condition">전월 실적 120만원 이상 시</p>
+                            <a href="https://product.kt.com/benefit/membership/web/card.html" target="_blank" class="btn-card-details">자세히 보기</a>
+                        </div>
+                         <div class="affiliate-card">
+                            <div class="card-image-placeholder"><i class="fas fa-h-square"></i></div>
+                            <h3>KT Super 할부 Plus 현대카드</h3>
+                            <div class="card-benefit">월 최대 20,000원 할인</div>
+                            <p class="card-condition">전월 실적 70만원 이상 시</p>
+                            <a href="https://product.kt.com/benefit/membership/web/card.html" target="_blank" class="btn-card-details">자세히 보기</a>
+                        </div>
+                        <div class="affiliate-card">
+                            <div class="card-image-placeholder"><i class="fas fa-s-square"></i></div>
+                            <h3>Simple Life with KT(신한카드)</h3>
+                            <div class="card-benefit">월 최대 17,000원 할인</div>
+                            <p class="card-condition">전월 실적 70만원 이상 시</p>
+                            <a href="https://product.kt.com/benefit/membership/web/card.html" target="_blank" class="btn-card-details">자세히 보기</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-disclaimer">
+                    <p><i class="fas fa-exclamation-circle"></i> 위 정보는 요약된 정보이며, 통신사 및 카드사 정책에 따라 변경될 수 있습니다.</p>
+                    <p>정확한 할인 혜택, 전월 실적 조건, 연회비 등은 '자세히 보기'를 통해 해당 카드사 홈페이지에서 반드시 확인하시기 바랍니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="quick-signup-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2><i class="fas fa-pencil-alt"></i> 간편 신청</h2>
+                <button class="modal-close-btn" aria-label="닫기">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="qs-section">
+                    <h4><span class="qs-step">1</span> 통신사 선택</h4>
+                    <div id="qs-telecom-options" class="qs-options-container"></div>
+                </div>
+                <div class="qs-section">
+                    <h4><span class="qs-step">2</span> 인터넷 상품 선택</h4>
+                    <div id="qs-internet-options" class="qs-options-container"></div>
+                </div>
+                <div class="qs-section">
+                    <h4><span class="qs-step">3</span> TV 상품 선택</h4>
+                    <div id="qs-tv-options" class="qs-options-container"></div>
+                </div>
+                <div class="qs-section">
+                    <h4><span class="qs-step">4</span> 추가 상품 선택 (선택)</h4>
+                    <div class="qs-additional-options">
+                        <div class="qs-additional-item">
+                            <label for="qs-additional-tv-select">TV 추가</label>
+                            <select id="qs-additional-tv-select" class="qs-select">
+                                <option value="">선택 안함</option>
+                            </select>
+                        </div>
+                        <div class="qs-additional-item">
+                            <label>휴대폰(유심)</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="qs-usim-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-submit" id="qs-submit-btn">신청하기</button>
+            </div>
+        </div>
+    </div>
+    
+    <aside class="quick-menu-container">
+        <div class="quick-menu-toggle">
+            <div class="quick-menu-icons">
+                <a href="#" class="icon-item" data-action="secret-benefit"><i class="fas fa-dollar-sign"></i></a>
+                <a href="https://pf.kakao.com/_pqxnxmT" target="_blank" class="icon-item yellow" data-action="kakao"><i class="fas fa-comment"></i></a>
+                <a href="#" class="icon-item" data-action="self-signup"><i class="fas fa-pencil-alt"></i></a>
+                <a href="#" class="icon-item primary" data-action="ai-finder"><i class="fas fa-search"></i></a>
+            </div>
+        </div>
+        <div class="quick-menu-panel">
+             <div class="toggle-arrow"><i class="fas fa-chevron-left"></i></div>
+            <div class="quick-menu-section">
+                <h4>상담하기</h4>
+                <a href="#" id="quick-secret-benefit-btn" class="quick-panel-btn"><i class="fas fa-dollar-sign"></i> 비밀혜택 문자받기</a>
+                <a href="https://pf.kakao.com/_pqxnxmT" target="_blank" class="quick-panel-btn yellow"><i class="fas fa-comment"></i> 실시간 카톡상담</a>
+            </div>
+            <div class="quick-menu-section">
+                <h4>가입하기</h4>
+                <a href="#" id="quick-self-signup-btn" class="quick-panel-btn"><i class="fas fa-pencil-alt"></i> 셀프 바로가입</a>
+                <a href="#" id="quick-ai-finder-btn" class="quick-panel-btn primary"><i class="fas fa-search"></i> 나에게 맞는 상품 찾기</a>
+            </div>
+            <div class="quick-menu-contact">
+                <p>성지넷은 365일<br>24시간 AI컨설팅</p>
+                <strong>1644-6780</strong>
+                <div class="quick-menu-image-wrapper">
+                     <video src="assets/wplanner.mp4" autoplay muted loop playsinline></video>
+                    <span>24시간 AI컨설팅</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <script src="js/main-calculator.js"></script>
+    <script src="js/ai-calculator.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+/* css/admin-style.css */
+:root {
+    --primary-color: #007bff; --primary-dark: #0056b3; --border-color: #dee2e6;
+    --white-color: #ffffff; --text-color: #333; --light-bg: #f8f9fa;
+    --danger-color: #dc3545; --success-color: #28a745;
+}
+body { font-family: sans-serif; background-color: var(--light-bg); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+#login-container { text-align: center; background: var(--white-color); padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+#login-container h2 { margin-bottom: 20px; }
+#login-container input { font-size: 1em; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 15px; width: 250px; }
+#login-container button { font-size: 1em; padding: 10px 20px; border: none; background: var(--primary-color); color: white; border-radius: 6px; cursor: pointer; }
+#login-message { margin-top: 15px; color: var(--danger-color); font-weight: bold; }
+.admin-container { padding: 20px; max-width: 900px; margin: 40px auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-radius: 12px; background-color: var(--white-color); }
+h1 { color: var(--primary-dark); border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; margin-bottom: 20px; }
+.section { margin-bottom: 30px; }
+h2 { font-size: 1.2em; margin-bottom: 15px; color: var(--text-color); }
+.telecom-selector { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; flex-wrap: wrap; }
+.telecom-selector button { padding: 10px 15px; border: 1px solid var(--border-color); background-color: var(--white-color); border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; }
+.telecom-selector button.active { background-color: var(--primary-color); color: var(--white-color); border-color: var(--primary-color); }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+.form-group { display: flex; flex-direction: column; }
+.form-group label { font-weight: 600; margin-bottom: 8px; font-size: 0.9em; }
+.form-group input { padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1em; }
+.actions { margin-top: 30px; display: flex; gap: 10px; justify-content: flex-end; }
+.actions button, .actions a { padding: 12px 25px; border-radius: 8px; font-size: 1em; font-weight: 700; cursor: pointer; text-decoration: none; }
+.btn-save { background-color: var(--primary-color); color: var(--white-color); border: none; }
+.btn-link { background-color: #6c757d; color: var(--white-color); border: none; display: inline-flex; align-items: center; }
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; z-index: 1000; }
+.toast.show.success { background-color: var(--success-color); }
+.toast.show.error { background-color: var(--danger-color); }

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성지넷 - 셀프 가입 신청</title>
+    <!-- 다음 주소찾기 API 스크립트 추가 -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+        
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --light-gray-color: #f8f9fa;
+            --border-color: #dee2e6;
+            --text-color: #212529;
+            --red-color: #dc3545;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: var(--light-gray-color); color: var(--text-color); }
+        .form-wrapper { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 40px 30px 150px 30px; min-height: 100vh; }
+        .progress-bar { display: flex; justify-content: space-between; align-items: center; list-style: none; margin-bottom: 50px; }
+        .progress-bar .step { text-align: center; position: relative; width: 20%; }
+        .progress-bar .step .icon { width: 30px; height: 30px; border-radius: 50%; background-color: var(--border-color); color: #fff; display: inline-flex; justify-content: center; align-items: center; border: 2px solid var(--border-color); transition: all 0.3s ease; }
+        .progress-bar .step .text { margin-top: 8px; font-size: 13px; color: var(--secondary-color); }
+        .progress-bar .step:not(:last-child)::after { content: ''; position: absolute; top: 15px; left: 50%; width: 100%; height: 2px; background-color: var(--border-color); z-index: -1; }
+        .progress-bar .step.active .icon { background-color: var(--primary-color); border-color: var(--primary-color); }
+        .progress-bar .step.active .text { color: var(--primary-color); font-weight: 700; }
+        .progress-bar .step.active:after { background-color: var(--primary-color); }
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+        .section-title { font-size: 24px; font-weight: 700; margin-bottom: 30px; }
+        .sub-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; border-top: 1px solid var(--border-color); padding-top: 25px; margin-top: 30px;}
+        .form-group { margin-bottom: 25px; }
+        label, .label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; }
+        .required { color: var(--red-color); margin-left: 2px; }
+        .form-control { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 16px; transition: border-color 0.2s; }
+        .form-control:focus { outline: none; border-color: var(--primary-color); }
+        
+        .radio-group-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .radio-label { display: block; border: 1px solid var(--border-color); padding: 12px; text-align: center; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: 500; color: #aaa; background: #fff; }
+        .radio-input { display: none; }
+        .radio-input:checked + .radio-label { border-color: var(--primary-color); color: var(--primary-color); font-weight: 700; }
+
+        .input-with-button, .input-with-select { display: flex; gap: 10px; }
+        .input-with-select .form-control:first-child { flex: 2; }
+        .input-with-select .form-control:last-child { flex: 1; }
+        .input-with-button .btn-gray { flex: 0 0 100px; background: #eee; border: none; color: #333; font-weight: 500; cursor: pointer; border-radius: 6px; }
+        .input-with-button .form-control { flex: 1; }
+        
+        .helper-text { font-size: 12px; color: #666; margin-top: 8px; }
+        .btn-add-contact { width: 100%; padding: 12px; background-color: #f1f3f5; border: 1px dashed #ccc; color: #666; border-radius: 6px; cursor: pointer; font-weight: 500; margin-top: 10px; }
+
+        .product-summary { border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; }
+        .product-summary .row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
+        .product-summary .row:not(:last-child) { border-bottom: 1px dashed var(--border-color); }
+        .product-summary .title { font-weight: 500; color: #555; }
+        .product-summary .value { font-weight: 700; text-align: right; }
+        .choice-box { border: 1px solid var(--border-color); border-radius: 8px; padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .choice-box.active { border-color: var(--primary-color); border-width: 2px; }
+        .check-icon { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border-color); color: #fff; display: flex; justify-content: center; align-items: center; }
+        .choice-box.active .check-icon { background-color: var(--primary-color); border-color: var(--primary-color); }
+        
+        /* 약관동의 스타일 */
+        .terms-box { border: 1px solid var(--border-color); border-radius: 8px; }
+        .terms-all { padding: 15px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; }
+        .terms-all label { margin-bottom: 0; font-weight: 700; cursor: pointer; }
+        .terms-list { list-style: none; padding: 0; }
+        .terms-item { padding: 15px; font-size: 14px; }
+        .terms-item:not(:last-child) { border-bottom: 1px solid var(--border-color); }
+        .terms-item-line { display: flex; align-items: center; }
+        .terms-item-line label { flex-grow: 1; margin-left: 8px; margin-bottom: 0; cursor: pointer; }
+        .terms-toggle-arrow { color: var(--secondary-color); text-decoration: none; font-weight: 700; padding: 5px; }
+
+
+        .sticky-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); padding: 15px; z-index: 100; }
+        .footer-content { max-width: 600px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .price-summary { display: none; }
+        .price-summary .label { font-size: 14px; color: #555; }
+        .price-summary .amount { font-size: 18px; font-weight: 700; }
+        .price-summary .gift { color: var(--red-color); }
+        .nav-buttons { display: flex; gap: 10px; width: 100%; }
+        .nav-btn { flex: 1; padding: 15px; border: none; border-radius: 6px; font-size: 16px; font-weight: 700; cursor: pointer; }
+        .btn-prev { background-color: #e9ecef; color: #495057; }
+        .btn-next { background-color: var(--primary-color); color: #fff; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background-color: #fff; padding: 30px; border-radius: 12px; text-align: center; width: 90%; max-width: 350px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .modal-content.large { max-width: 500px; text-align: left;}
+        #terms-detail-modal .modal-body { max-height: 60vh; overflow-y: auto; background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; line-height: 1.6; }
+        .modal-content h3 { margin-bottom: 15px; font-size: 18px; }
+        .modal-content p { margin-bottom: 25px; color: #555; font-size: 15px; line-height: 1.5; }
+        .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; }
+        .modal-buttons .btn-next { flex: 1; }
+        @media (max-width: 600px) { .form-wrapper { padding: 20px 15px 150px 15px; } .progress-bar .text { font-size: 11px; } }
+    </style>
+</head>
+<body>
+
+    <div class="form-wrapper">
+        <ol class="progress-bar">
+            <li class="step"><div class="icon">1</div><div class="text">상품신청</div></li>
+            <li class="step"><div class="icon">2</div><div class="text">정보입력</div></li>
+            <li class="step"><div class="icon">3</div><div class="text">사은품</div></li>
+            <li class="step"><div class="icon">4</div><div class="text">납부방법</div></li>
+            <li class="step"><div class="icon">5</div><div class="text">약관동의</div></li>
+        </ol>
+
+        <form id="signup-form">
+            <input type="hidden" id="selected-product-telecom" name="selectedTelecom"><input type="hidden" id="selected-product-internet" name="selectedInternet">
+            <input type="hidden" id="selected-product-tv" name="selectedTv"><input type="hidden" id="selected-product-settop" name="selectedSettop">
+            <input type="hidden" id="selected-product-additionalTv" name="selectedAdditionalTv"><input type="hidden" id="selected-product-combined" name="selectedCombinedProduct">
+            <input type="hidden" id="selected-product-totalPrice" name="selectedTotalPrice"><input type="hidden" id="selected-product-supportFund" name="selectedSupportFund">
+            
+            <div class="form-section">
+                <h2 class="section-title">상품 신청서</h2><div class="product-summary" id="product-summary-container"></div>
+                <div class="form-group" style="margin-top: 30px;"><div class="choice-box active">신청자 본인입니다.<div class="check-icon">✔</div></div></div>
+                <div class="form-group"><div class="choice-box">가족, 사업자, 외국인 중에 해당됩니다.<div class="check-icon">✔</div></div></div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">가입자 정보를 입력해주세요</h2><h3 class="sub-title" style="border:none; margin-top:0;">가입자 정보</h3>
+                <div class="form-group">
+                    <label class="label">고객 구분<span class="required">*</span></label>
+                    <div class="radio-group-container">
+                        <div><input type="radio" id="type-personal" name="customerType" value="개인" class="radio-input" checked><label for="type-personal" class="radio-label">개인</label></div>
+                        <div><input type="radio" id="type-individual-biz" name="customerType" value="개인사업자" class="radio-input"><label for="type-individual-biz" class="radio-label">개인사업자</label></div>
+                        <div><input type="radio" id="type-corporate-biz" name="customerType" value="법인사업자" class="radio-input"><label for="type-corporate-biz" class="radio-label">법인사업자</label></div>
+                        <div><input type="radio" id="type-foreigner" name="customerType" value="외국인" class="radio-input"><label for="type-foreigner" class="radio-label">외국인</label></div>
+                    </div><p class="helper-text">사업장 또는 소호 신청인 경우 개인사업자를 선택해주세요.</p>
+                </div>
+                <!-- [추가] 법인명 -->
+                <div class="form-group" id="corporate-name-section" style="display: none;"><label for="corporateName">법인명<span class="required">*</span></label><input type="text" id="corporateName" name="corporateName" class="form-control"></div>
+                <!-- [추가] 상호명 -->
+                <div class="form-group" id="biz-name-section" style="display: none;"><label for="bizName">상호명<span class="required">*</span></label><input type="text" id="bizName" name="bizName" class="form-control"></div>
+                <!-- 가입자명/대표자명 -->
+                <div class="form-group" id="person-name-section"><label for="name" id="name-label">가입자명<span class="required">*</span></label><input type="text" id="name" name="name" class="form-control" required></div>
+                <!-- [추가] 사업자등록번호 -->
+                <div class="form-group" id="biz-reg-number-section" style="display: none;"><label for="bizRegNumber">사업자등록번호<span class="required">*</span></label><input type="text" id="bizRegNumber" name="bizRegNumber" class="form-control" placeholder="'-'없이 10자리 숫자만 입력" maxlength="10"></div>
+                <!-- 생년월일 -->
+                <div class="form-group" id="birth-section"><label for="birth">생년월일<span class="required">*</span></label><input type="text" id="birth" name="birth" class="form-control" placeholder="예: 19760612" maxlength="8" required></div>
+                <div class="form-group">
+                    <label class="label">성별<span class="required">*</span></label>
+                    <div class="radio-group-container">
+                        <div><input type="radio" id="gender-male" name="gender" value="남성" class="radio-input" checked><label for="gender-male" class="radio-label">남성</label></div>
+                        <div><input type="radio" id="gender-female" name="gender" value="여성" class="radio-input"><label for="gender-female" class="radio-label">여성</label></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone">가입자 명의 연락처<span class="required">*</span></label>
+                    <div class="input-with-select"><input type="tel" id="phone" name="phone" class="form-control" placeholder="'-'없이 입력" required><select name="carrier" class="form-control" required><option value="SKT">SKT</option><option value="KT">KT</option><option value="LG">LG U+</option><option value="알뜰폰">알뜰폰</option></select></div>
+                    <button type="button" class="btn-add-contact">+ 비상 연락처 추가</button>
+                </div>
+                <div class="form-group"><label for="email">이메일<span class="required">*</span></label><input type="email" id="email" name="email" class="form-control" required></div>
+                <div class="form-group">
+                    <label>설치주소<span class="required">*</span></label>
+                    <div class="input-with-button"><button type="button" class="btn-gray" onclick="openDaumPostcode()">주소찾기</button><input type="text" id="address-basic" name="addressBasic" class="form-control" placeholder="주소" readonly required></div>
+                    <input type="text" id="address-detail" name="addressDetail" class="form-control" placeholder="상세 주소 입력" style="margin-top: 10px;" required>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-title">사은품 받는 분 정보를 알려주세요</h2>
+                <div class="form-group">
+                    <label for="bank">계좌정보<span class="required">*</span></label>
+                    <select id="bank" name="bank" class="form-control" required>
+                        <option value="">은행 선택</option><option value="KB국민은행">KB국민은행</option><option value="신한은행">신한은행</option><option value="우리은행">우리은행</option><option value="하나은행">하나은행</option><option value="IBK기업은행">IBK기업은행</option><option value="NH농협은행">NH농협은행</option><option value="KDB산업은행">KDB산업은행</option><option value="SC제일은행">SC제일은행</option><option value="씨티은행">씨티은행</option><option value="수협은행">수협은행</option><option value="카카오뱅크">카카오뱅크</option><option value="케이뱅크">케이뱅크</option><option value="토스뱅크">토스뱅크</option><option value="경남은행">경남은행</option><option value="광주은행">광주은행</option><option value="대구은행">대구은행</option><option value="부산은행">부산은행</option><option value="전북은행">전북은행</option><option value="제주은행">제주은행</option><option value="새마을금고">새마을금고</option><option value="신용협동조합">신용협동조합</option><option value="저축은행">저축은행</option><option value="우체국">우체국</option>
+                    </select>
+                    <input type="text" class="form-control" id="giftAccountNumber" name="accountNumber" style="margin-top:10px;" placeholder="계좌번호 입력 ('-'없이 숫자만)" required>
+                </div>
+                <div class="form-group">
+                    <label for="giftcard">상품권 선택</label>
+                    <select id="giftcard" name="giftcard" class="form-control">
+                        <option value="이마트 상품권">이마트 상품권</option><option value="홈플러스 상품권">홈플러스 상품권</option>
+                        <option value="롯데상품권">롯데상품권</option><option value="농협상품권">농협상품권</option><option value="기타">기타</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-section">
+                 <h2 class="section-title">납부 방법을 알려주세요</h2>
+                 <div class="form-group">
+                    <label for="paymentMethod">납부 방법<span class="required">*</span></label>
+                    <select id="paymentMethod" name="paymentMethod" class="form-control" required><option value="">납부 방법을 선택해주세요</option><option value="계좌이체">계좌이체</option><option value="카드납부">카드납부</option></select>
+                </div>
+                <div id="payer-info-section" style="display: none;">
+                    <h3 class="sub-title">계좌 정보 입력</h3>
+                    <div class="form-group"><label for="payerName">납부자명<span class="required">*</span></label><input type="text" id="payerName" name="payerName" class="form-control"></div>
+                    <div class="form-group">
+                        <label for="payerBank">은행명<span class="required">*</span></label>
+                        <select id="payerBank" name="payerBank" class="form-control">
+                             <option value="">은행 선택</option><option value="KB국민은행">KB국민은행</option><option value="신한은행">신한은행</option><option value="우리은행">우리은행</option><option value="하나은행">하나은행</option><option value="IBK기업은행">IBK기업은행</option><option value="NH농협은행">NH농협은행</option><option value="KDB산업은행">KDB산업은행</option><option value="SC제일은행">SC제일은행</option><option value="씨티은행">씨티은행</option><option value="수협은행">수협은행</option><option value="카카오뱅크">카카오뱅크</option><option value="케이뱅크">케이뱅크</option><option value="토스뱅크">토스뱅크</option><option value="경남은행">경남은행</option><option value="광주은행">광주은행</option><option value="대구은행">대구은행</option><option value="부산은행">부산은행</option><option value="전북은행">전북은행</option><option value="제주은행">제주은행</option><option value="새마을금고">새마을금고</option><option value="신용협동조합">신용협동조합</option><option value="저축은행">저축은행</option><option value="우체국">우체국</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label for="payerAccountNumber">계좌번호<span class="required">*</span></label><input type="text" id="payerAccountNumber" name="payerAccountNumber" class="form-control" placeholder="'-'없이 숫자만 입력"></div>
+                </div>
+                <div id="card-info-section" style="display: none;">
+                    <h3 class="sub-title">카드 정보 입력</h3>
+                     <div class="form-group"><label for="cardHolderName">카드주명<span class="required">*</span></label><input type="text" id="cardHolderName" name="cardHolderName" class="form-control"></div>
+                    <div class="form-group">
+                        <label for="payerCardCompany">카드사<span class="required">*</span></label>
+                        <select id="payerCardCompany" name="payerCardCompany" class="form-control">
+                            <option value="">카드사 선택</option><option value="현대카드">현대카드</option><option value="삼성카드">삼성카드</option><option value="신한카드">신한카드</option><option value="KB국민카드">KB국민카드</option><option value="롯데카드">롯데카드</option><option value="우리카드">우리카드</option><option value="하나카드">하나카드</option><option value="BC카드">BC카드</option><option value="NH농협카드">NH농협카드</option><option value="씨티카드">씨티카드</option><option value="카카오뱅크카드">카카오뱅크카드</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label for="payerCardNumber">카드번호<span class="required">*</span></label><input type="text" id="payerCardNumber" name="payerCardNumber" class="form-control" placeholder="'-'없이 숫자만 입력" maxlength="19"></div>
+                    <div class="form-group"><label for="payerCardExpiry">유효기간 (MM/YY)<span class="required">*</span></label><input type="text" id="payerCardExpiry" name="payerCardExpiry" class="form-control" placeholder="예: 12/28" maxlength="5"></div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">필독사항과 약관을 확인해주세요</h2>
+                <div class="terms-box">
+                    <div class="terms-all">
+                        <input type="checkbox" id="agree-all" name="agreeAll" style="margin-right: 10px;">
+                        <label for="agree-all">전체 동의합니다.</label>
+                    </div>
+                    <ul class="terms-list">
+                        <li class="terms-item">
+                             <div class="terms-item-line">
+                                <input type="checkbox" id="agree-1" name="agree1" class="terms-checkbox-item" required>
+                                <label for="agree-1">(필수) 개인정보 수집 및 이용 동의</label>
+                                <a href="#" class="terms-toggle-arrow" data-term="term1">&gt;</a>
+                            </div>
+                        </li>
+                        <li class="terms-item">
+                            <div class="terms-item-line">
+                                <input type="checkbox" id="agree-2" name="agree2" class="terms-checkbox-item" required>
+                                <label for="agree-2">(필수) 개인정보 제3자 제공 동의</label>
+                                <a href="#" class="terms-toggle-arrow" data-term="term2">&gt;</a>
+                            </div>
+                        </li>
+                        <li class="terms-item">
+                             <div class="terms-item-line">
+                                <input type="checkbox" id="agree-3" name="agree3" class="terms-checkbox-item">
+                                <label for="agree-3">(선택) 마케팅 정보 수신 동의</label>
+                                <a href="#" class="terms-toggle-arrow" data-term="term3">&gt;</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="form-group" style="margin-top:20px;"><label for="requests">고객 요청사항</label><textarea id="requests" name="requests" class="form-control" rows="4" placeholder="요청사항을 입력해주세요"></textarea></div>
+            </div>
+        </form>
+    </div>
+
+    <div class="sticky-footer">
+        <div class="footer-content">
+            <div class="price-summary"><div class="label">월요금 <span style="font-size:12px;">(VAT포함)</span></div><div class="amount" id="summary-price">0원</div><div class="amount gift" id="summary-gift">사은품 0원</div></div>
+            <div class="nav-buttons"><button type="button" class="nav-btn btn-prev" style="display: none;">이전 단계로</button><button type="button" class="nav-btn btn-next">다음</button></div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="confirm-modal"><div class="modal-content"><h3>알림</h3><p>납부자와 납부방법이 가입자와 동일합니까?</p><div class="modal-buttons"><button class="nav-btn btn-prev" id="modal-no">아니요</button><button class="nav-btn btn-next" id="modal-yes">예, 동일합니다</button></div></div></div>
+    <div class="modal-overlay" id="validation-alert-modal"><div class="modal-content"><h3>알림</h3><p id="validation-alert-message"></p><div class="modal-buttons"><button class="nav-btn btn-next" id="validation-alert-ok">확인</button></div></div></div>
+    <div class="modal-overlay" id="terms-detail-modal"><div class="modal-content large"><h3 id="terms-modal-title"></h3><div id="terms-modal-body" class="modal-body"></div><div class="modal-buttons"><button class="nav-btn btn-next" id="terms-modal-close">확인</button></div></div></div>
+
+    <script>
+    function openDaumPostcode() { new daum.Postcode({ oncomplete: function(data) { document.getElementById('address-basic').value = data.roadAddress || data.jibunAddress; document.getElementById('address-detail').focus(); } }).open(); }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const productInfo = {
+            telecom: urlParams.get('telecom'), internet: urlParams.get('internet'), tv: urlParams.get('tv'), settop: urlParams.get('settop'), 
+            additionalTv: urlParams.get('additionalTv'), combinedProduct: urlParams.get('combinedProduct'), totalPrice: urlParams.get('totalPrice'), supportFund: urlParams.get('supportFund')
+        };
+        const summaryContainer = document.getElementById('product-summary-container');
+        summaryContainer.innerHTML = '';
+        function addSummaryRow(title, value) { if (value && value !== 'null' && value !== 'undefined') { const row = document.createElement('div'); row.className = 'row'; row.innerHTML = `<span class="title">${title}</span><span class="value">${value}</span>`; summaryContainer.appendChild(row); } }
+        addSummaryRow('통신사', productInfo.telecom); addSummaryRow('인터넷', productInfo.internet); addSummaryRow('TV', productInfo.tv);
+        addSummaryRow('셋탑박스', productInfo.settop); addSummaryRow('TV 추가', productInfo.additionalTv); addSummaryRow('결합상품', productInfo.combinedProduct);
+        if (productInfo.totalPrice) { document.getElementById('summary-price').textContent = productInfo.totalPrice; }
+        if (productInfo.supportFund) { document.getElementById('summary-gift').textContent = `사은품 ${productInfo.supportFund}`; }
+        
+        document.getElementById('selected-product-telecom').value = productInfo.telecom || ''; document.getElementById('selected-product-internet').value = productInfo.internet || '';
+        document.getElementById('selected-product-tv').value = productInfo.tv || ''; document.getElementById('selected-product-settop').value = productInfo.settop || '';
+        document.getElementById('selected-product-additionalTv').value = productInfo.additionalTv || ''; document.getElementById('selected-product-combined').value = productInfo.combinedProduct || '';
+        document.getElementById('selected-product-totalPrice').value = productInfo.totalPrice || ''; document.getElementById('selected-product-supportFund').value = productInfo.supportFund || '';
+
+        const signupForm = document.getElementById('signup-form'); const formSections = document.querySelectorAll('.form-section');
+        const progressSteps = document.querySelectorAll('.progress-bar .step'); const prevBtn = document.querySelector('.btn-prev'); const nextBtn = document.querySelector('.btn-next');
+        const priceSummary = document.querySelector('.price-summary'); const navButtons = document.querySelector('.nav-buttons');
+        const confirmModal = document.getElementById('confirm-modal'); const validationAlertModal = document.getElementById('validation-alert-modal');
+        const validationAlertOkBtn = document.getElementById('validation-alert-ok');
+        const validationAlertMessage = document.getElementById('validation-alert-message'); const paymentMethodSelect = document.getElementById('paymentMethod');
+        const payerInfoSection = document.getElementById('payer-info-section'); const cardInfoSection = document.getElementById('card-info-section');
+        
+        let currentStep = 1; let isPayerInfoConfirmed = false; let invalidInput = null;
+        
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvKH6JTly1_VpfqXixLX9NA_T1tTM4z0FS-CWJHai0nW4Pn0Fv_p-JsG648IeKqAANUg/exec"; 
+
+        const accountLengthRules = {
+            'KB국민은행': [12, 14], '신한은행': [11, 12, 14], '우리은행': [13], '하나은행': [11, 12, 14], 'IBK기업은행': [10, 11, 12, 14],
+            'NH농협은행': [13], 'KDB산업은행': [12], 'SC제일은행': [11], '씨티은행': [10, 12], '수협은행': [12], '카카오뱅크': [13],
+            '케이뱅크': [12], '토스뱅크': [12], '경남은행': [12], '광주은행': [11, 13], '대구은행': [11, 12, 13], '부산은행': [11, 12, 13],
+            '전북은행': [11, 12, 14], '제주은행': [10, 12], '새마을금고': [13, 14], '신용협동조합': [13], '저축은행': [13], '우체국': [14]
+        };
+
+        function updateFormUI() {
+            formSections.forEach((section, index) => section.classList.toggle('active', index + 1 === currentStep));
+            progressSteps.forEach((step, index) => step.classList.toggle('active', index < currentStep));
+            prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
+            nextBtn.textContent = currentStep === formSections.length ? '제출하기' : '다음';
+            priceSummary.style.display = currentStep === 1 ? 'block' : 'none';
+            navButtons.style.width = currentStep === 1 ? 'auto' : '100%';
+        }
+        function showValidationAlert(message, element) { 
+            validationAlertMessage.textContent = message; 
+            validationAlertModal.style.display = 'flex'; 
+            invalidInput = element;
+            validationAlertOkBtn.focus();
+        }
+
+        validationAlertOkBtn.addEventListener('click', () => {
+            validationAlertModal.style.display = 'none';
+            if (invalidInput) {
+                invalidInput.focus();
+                invalidInput = null;
+            }
+        });
+
+        validationAlertOkBtn.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                validationAlertOkBtn.click();
+            }
+        });
+
+        function validateCurrentStep() {
+            const currentSection = formSections[currentStep - 1];
+            for (const input of currentSection.querySelectorAll('[required]')) {
+                if(input.offsetParent === null) continue;
+                if (input.tagName === 'SELECT' && input.value === '') { let labelText = document.querySelector(`label[for="${input.id}"]`)?.innerText.replace('*', '') || '선택항목'; showValidationAlert(`"${labelText}"을(를) 선택해주세요.`, input); return false; }
+                if (input.type === 'radio' && !Array.from(currentSection.querySelectorAll(`input[name="${input.name}"]`)).some(radio => radio.checked)) { const groupLabel = input.closest('.form-group').querySelector('.label').innerText.replace('*', ''); showValidationAlert(`"${groupLabel}" 항목을 선택해주세요.`, input); return false; }
+                else if (input.classList.contains('terms-checkbox-item') && !input.checked) { showValidationAlert('필수 약관에 모두 동의해주셔야 합니다.', input); return false; }
+                else if (!input.value.trim() && !['SELECT', 'RADIO', 'CHECKBOX'].includes(input.tagName)) {
+                    if (input.id === 'address-basic') { showValidationAlert('"주소찾기"를 진행해주세요.', input); return false; }
+                    let labelText = document.querySelector(`label[for="${input.id}"]`)?.innerText.replace('*', '') || input.placeholder || '필수 입력';
+                    showValidationAlert(`"${labelText}" 항목은 필수입니다.`, input); return false;
+                }
+                const nameRegex = /^(?:[a-zA-Z]{4,}|[가-힣]{2,})$/;
+                if ((input.id === 'name' || input.id === 'bizName' || input.id === 'corporateName') && !nameRegex.test(input.value)) { showValidationAlert('이름/상호/법인명은 한글 2자 이상 또는 영문 4자 이상이어야 합니다.', input); return false; }
+                if (input.id === 'bizRegNumber' && !/^\d{10}$/.test(input.value)) { showValidationAlert('사업자등록번호는 10자리 숫자로 입력해주세요.', input); return false; }
+                if (input.id === 'birth' && !/^\d{8}$/.test(input.value)) { showValidationAlert('생년월일을 8자리 숫자로 정확히 입력해주세요.', input); return false; }
+                if (input.id === 'phone' && !/^010\d{8}$/.test(input.value.replace(/-/g, ''))) { showValidationAlert('휴대폰 번호 형식이 올바르지 않습니다.', input); return false; }
+                if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) { showValidationAlert('이메일 형식이 올바르지 않습니다.', input); return false; }
+                
+                if (input.name === 'accountNumber' || input.name === 'payerAccountNumber') {
+                    const bankSelect = input.name === 'accountNumber' ? document.getElementById('bank') : document.getElementById('payerBank');
+                    const bankName = bankSelect.value;
+                    const accountNumber = input.value.replace(/\D/g, '');
+                    const rules = accountLengthRules[bankName];
+                    if (bankName && rules && !rules.includes(accountNumber.length)) {
+                        showValidationAlert(`${bankName} 계좌번호 자릿수(${rules.join(' 또는 ')}자리)가 올바르지 않습니다.`, input);
+                        return false;
+                    }
+                }
+                if (input.id === 'payerCardNumber' && !/^\d{15,16}$/.test(input.value.replace(/-/g, ''))) { showValidationAlert('카드번호는 15~16자리 숫자로 입력해주세요.', input); return false; }
+                if (input.id === 'payerCardExpiry') {
+                    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(input.value)) { showValidationAlert('유효기간을 MM/YY 형식(예: 12/28)으로 입력해주세요.', input); return false; }
+                    const [month, year] = input.value.split('/'); const expiryDate = new Date(`20${year}`, month, 0); const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    if (expiryDate < today) { showValidationAlert('만료된 카드입니다. 유효기간을 다시 확인해주세요.', input); return false; }
+                }
+            }
+            return true;
+        }
+        
+        function goToNextStep() {
+            if (!validateCurrentStep()) return;
+            if (currentStep < formSections.length) {
+                if (currentStep === 4 && !isPayerInfoConfirmed) {
+                    if (paymentMethodSelect.value) { confirmModal.style.display = 'flex'; return; }
+                }
+                currentStep++; isPayerInfoConfirmed = false; updateFormUI();
+            } else { signupForm.dispatchEvent(new Event('submit', { cancelable: true })); }
+        }
+
+        paymentMethodSelect.addEventListener('change', function() { payerInfoSection.style.display = 'none'; cardInfoSection.style.display = 'none'; isPayerInfoConfirmed = false; });
+        prevBtn.addEventListener('click', () => { if (currentStep > 1) { currentStep--; isPayerInfoConfirmed = false; updateFormUI(); } });
+        nextBtn.addEventListener('click', goToNextStep);
+        
+        function showPayerSection(isSamePerson) {
+            isPayerInfoConfirmed = true; const selectedMethod = paymentMethodSelect.value;
+            const sections = {
+                '계좌이체': { section: payerInfoSection, nameFieldId: 'payerName', bankFieldId: 'payerBank', accountFieldId: 'payerAccountNumber' },
+                '카드납부': { section: cardInfoSection, nameFieldId: 'cardHolderName' }
+            };
+            Object.values(sections).forEach(s => { s.section.style.display = 'none'; s.section.querySelectorAll('input, select').forEach(el => el.required = false); });
+            
+            const target = sections[selectedMethod];
+            if (target) {
+                target.section.style.display = 'block';
+                target.section.querySelectorAll('input, select').forEach(el => el.required = true);
+                
+                const applicantName = document.getElementById('name').value;
+                if(isSamePerson) {
+                    document.getElementById(target.nameFieldId).value = applicantName;
+                    if(selectedMethod === '계좌이체') {
+                        document.getElementById(target.bankFieldId).value = document.getElementById('bank').value;
+                        document.getElementById(target.accountFieldId).value = document.getElementById('giftAccountNumber').value;
+                    }
+                } else { 
+                    document.getElementById(target.nameFieldId).value = ''; 
+                    document.getElementById(target.nameFieldId).focus();
+                    if(selectedMethod === '계좌이체') {
+                        document.getElementById(target.bankFieldId).value = '';
+                        document.getElementById(target.accountFieldId).value = '';
+                    }
+                }
+            }
+            confirmModal.style.display = 'none';
+        }
+
+        document.getElementById('modal-yes').addEventListener('click', () => showPayerSection(true));
+        document.getElementById('modal-no').addEventListener('click', () => showPayerSection(false));
+        
+        document.getElementById('payerCardNumber').addEventListener('input', function (e) { let v = e.target.value.replace(/\D/g, ''); e.target.value = v.replace(/(\d{4})(?=\d)/g, '$1-'); });
+        document.getElementById('payerCardExpiry').addEventListener('input', function (e) { let v = e.target.value.replace(/\D/g, ''); if (v.length > 2) { e.target.value = `${v.slice(0, 2)}/${v.slice(2, 4)}`; } else { e.target.value = v; } });
+        
+        const customerTypeRadios = document.querySelectorAll('input[name="customerType"]');
+        const corporateNameSection = document.getElementById('corporate-name-section'); const bizNameSection = document.getElementById('biz-name-section');
+        const bizRegNumberSection = document.getElementById('biz-reg-number-section'); const birthSection = document.getElementById('birth-section');
+        const personNameSection = document.getElementById('person-name-section');
+        const corporateNameInput = document.getElementById('corporateName'); const bizNameInput = document.getElementById('bizName');
+        const bizRegNumberInput = document.getElementById('bizRegNumber'); const birthInput = document.getElementById('birth');
+        const personNameInput = document.getElementById('name'); const nameLabel = document.getElementById('name-label');
+
+        function handleCustomerTypeChange(type) {
+            corporateNameSection.style.display = 'none'; corporateNameInput.required = false;
+            bizNameSection.style.display = 'none'; bizNameInput.required = false;
+            bizRegNumberSection.style.display = 'none'; bizRegNumberInput.required = false;
+            birthSection.style.display = 'block'; birthInput.required = true;
+            personNameSection.style.display = 'block'; personNameInput.required = true;
+            nameLabel.innerHTML = '가입자명<span class="required">*</span>';
+            
+            if (type === '개인사업자') {
+                bizNameSection.style.display = 'block';
+                bizNameInput.required = true;
+            } else if (type === '법인사업자') {
+                corporateNameSection.style.display = 'block'; corporateNameInput.required = true;
+                bizRegNumberSection.style.display = 'block'; bizRegNumberInput.required = true;
+                nameLabel.innerHTML = '대표자명<span class="required">*</span>';
+                birthSection.style.display = 'none';
+                birthInput.required = false;
+            }
+        }
+        customerTypeRadios.forEach(radio => radio.addEventListener('change', (e) => handleCustomerTypeChange(e.target.value)));
+        
+        // --- 약관 동의 로직 수정 ---
+        const termsAllCheckbox = document.getElementById('agree-all');
+        const termsCheckboxes = Array.from(document.querySelectorAll('.terms-checkbox-item'));
+
+        termsAllCheckbox.addEventListener('change', () => {
+            termsCheckboxes.forEach(checkbox => {
+                checkbox.checked = termsAllCheckbox.checked;
+            });
+        });
+
+        termsCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                termsAllCheckbox.checked = termsCheckboxes.every(cb => cb.checked);
+            });
+        });
+        
+        const termsToggles = document.querySelectorAll('.terms-toggle-arrow');
+        const termsDetailModal = document.getElementById('terms-detail-modal');
+        const termsModalTitle = document.getElementById('terms-modal-title');
+        const termsModalBody = document.getElementById('terms-modal-body');
+        const termsModalCloseBtn = document.getElementById('terms-modal-close');
+        
+        const termsContent = {
+            term1: { title: '(필수) 개인정보 수집 및 이용 동의', content: '<strong>제1조 (목적)</strong><br>본 약관은 성지넷 서비스 이용을 위해 필요한 개인정보의 수집 및 이용에 관한 사항을 규정함을 목적으로 합니다.<br><br><strong>제2조 (수집 항목)</strong><br>수집하는 개인정보 항목은 다음과 같습니다: 이름, 연락처, 주소 등 서비스 제공에 필요한 최소한의 정보.<br><br><strong>제3조 (보유 기간)</strong><br>수집된 정보는 서비스 제공 기간 동안 보유하며, 법령에 따른 보관 기간 이후에는 지체 없이 파기합니다.' },
+            term2: { title: '(필수) 개인정보 제3자 제공 동의', content: '<strong>제1조 (제공받는 자)</strong><br>서비스 가입 및 설치를 위해 각 통신사(SK, KT, LG U+ 등)에 개인정보가 제공됩니다.<br><br><strong>제2조 (제공 목적)</strong><br>인터넷, TV 등 신청하신 상품의 원활한 개통 및 설치 진행을 위함입니다.<br><br><strong>제3조 (제공 항목)</strong><br>성명, 연락처, 설치 주소 등 개통에 필요한 정보.' },
+            term3: { title: '(선택) 마케팅 정보 수신 동의', content: '<strong>제1조 (수신 목적)</strong><br>신규 상품 출시, 특별 할인 이벤트, 제휴 혜택 등 고객님께 유용한 마케팅 정보를 SMS, 이메일, 앱 푸시 등을 통해 제공하기 위함입니다.<br><br><strong>제2조 (철회 방법)</strong><br>마케팅 정보 수신을 원치 않으실 경우, 언제든지 고객센터(1644-6780)를 통해 동의를 철회할 수 있습니다.' }
+        };
+
+        termsToggles.forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                const termKey = toggle.dataset.term;
+                const termData = termsContent[termKey];
+                if (termData) {
+                    termsModalTitle.textContent = termData.title;
+                    termsModalBody.innerHTML = termData.content;
+                    termsDetailModal.style.display = 'flex';
+                }
+            });
+        });
+
+        function closeTermsModal() {
+            termsDetailModal.style.display = 'none';
+        }
+        termsDetailModal.addEventListener('click', (e) => { if(e.target === termsDetailModal) closeTermsModal(); });
+        termsModalCloseBtn.addEventListener('click', closeTermsModal);
+
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault(); 
+            const allRequiredAgreed = Array.from(document.querySelectorAll('.terms-checkbox-item[required]')).every(cb => cb.checked);
+            if (!allRequiredAgreed) {
+                showValidationAlert('필수 약관에 모두 동의해주셔야 합니다.', document.getElementById('agree-1'));
+                return;
+            }
+            if(!validateCurrentStep()) {
+                nextBtn.disabled = false;
+                updateFormUI();
+                return;
+            }
+
+            nextBtn.disabled = true; nextBtn.textContent = '제출 중...';
+            const formData = new FormData(signupForm); 
+            const data = Object.fromEntries(formData.entries());
+
+            if (!SCRIPT_URL) {
+                console.error("SCRIPT_URL is not set.");
+                alert("신청 시스템이 준비되지 않았습니다. 관리자에게 문의해주세요.");
+                nextBtn.disabled = false; updateFormUI();
+                return;
+            }
+
+            fetch(SCRIPT_URL, { 
+                method: 'POST', 
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
+            .then(data => {
+                if (data.result === 'success') {
+                    alert('가입 신청이 성공적으로 접수되었습니다. 곧 안내 연락드리겠습니다.');
+                    window.location.href = 'index.html';
+                } else {
+                    console.error('Apps Script Error:', data.message);
+                    alert('신청 처리 중 오류가 발생했습니다: ' + data.message);
+                }
+            })
+            .catch(error => { 
+                console.error('Fetch Error!', error); 
+                alert('신청 중 오류가 발생했습니다. 네트워크 연결을 확인하거나 관리자에게 문의해주세요.'); 
+            })
+            .finally(() => { 
+                nextBtn.disabled = false; 
+                updateFormUI(); 
+            });
+        });
+
+        updateFormUI();
+        handleCustomerTypeChange('개인');
+    });
+    </script>
+</body>
+</html>
