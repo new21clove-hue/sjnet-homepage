@@ -7,9 +7,10 @@
     
     <!-- ======== 카카오톡 공유 미리보기 설정 ======== -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://new21c.dothome.co.kr/">
+    <meta property="og:url" content="https://[배포된-사이트-주소]/">
     <meta property="og:title" content="성지넷 - 인터넷 TV 가입센터">
-    <meta property="og:image" content="ai_ryan.png">
+    <!-- [경로 수정] og:image는 전체 주소를 사용해야 합니다. 배포 후 Netlify 주소로 바꿔주세요. -->
+    <meta property="og:image" content="https://[배포된-사이트-주소]/assets/images/ai_ryan.png">
     <meta property="og:description" content="AI 스마트플래너로 우리 가족에게 딱 맞는 최적의 요금제를 찾아보세요!">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -24,14 +25,14 @@
             <div class="header-top">
                 <div class="logo"><a href="#" id="logo-link" aria-label="성지넷 홈으로">성지넷</a></div>
                 <div class="header-character-container">
-                    <img src="apeach.gif" alt="걷는 어피치" class="header-walking-character">
+                    <img src="assets/images/apeach.gif" alt="걷는 어피치" class="header-walking-character">
                 </div>
                 <div class="contact-info">
                     <a href="tel:1644-6780" class="tel" aria-label="전화 상담 1644-6780"><i class="fas fa-phone-volume"></i> 1644-6780</a>
                 </div>
             </div>
             <a href="#" class="ai-calculator-link-header" id="ai-calculator-header-link">
-                <img src="aiplan.png" alt="AI 스마트플래너 아이콘" class="ai-icon"> AI 스마트플래너
+                <img src="assets/images/aiplan.png" alt="AI 스마트플래너 아이콘" class="ai-icon"> AI 스마트플래너
                 <span class="click-indicator">CLICK</span>
             </a>
         </header>
@@ -90,13 +91,13 @@
                     <a href="#calculator-section" data-carrier="LG" class="telecom-card"><div class="logo-placeholder logo-lg">LG U+</div><p>LG U+</p></a>
                     <a href="#calculator-section" data-carrier="KT" class="telecom-card">
                         <div class="logo-placeholder logo-kt">
-                            <img src="kt_logo.png" alt="KT 로고">
+                            <img src="assets/images/kt_logo.png" alt="KT 로고">
                         </div>
                         <p>KT</p>
                     </a>
                     <a href="#calculator-section" data-carrier="SKB" class="telecom-card">
                         <div class="logo-placeholder logo-skb">
-                            <img src="b_logo.png" alt="B알뜰 로고">
+                            <img src="assets/images/b_logo.png" alt="B알뜰 로고">
                         </div>
                         <p>SK(알뜰)</p>
                     </a>
@@ -107,13 +108,13 @@
                     <a href="#calculator-section" data-carrier="LG" class="telecom-card"><div class="logo-placeholder logo-lg">LG U+</div><p>LG U+</p></a>
                     <a href="#calculator-section" data-carrier="KT" class="telecom-card">
                         <div class="logo-placeholder logo-kt">
-                            <img src="kt_logo.png" alt="KT 로고">
+                            <img src="assets/images/kt_logo.png" alt="KT 로고">
                         </div>
                         <p>KT</p>
                     </a>
                     <a href="#calculator-section" data-carrier="SKB" class="telecom-card">
                         <div class="logo-placeholder logo-skb">
-                            <img src="b_logo.png" alt="B알뜰 로고">
+                            <img src="assets/images/b_logo.png" alt="B알뜰 로고">
                         </div>
                         <p>SK(알뜰)</p>
                     </a>
@@ -202,7 +203,7 @@
             <div class="ai-grid-container">
                 <div class="ai-consultant-column">
                     <div class="ai-consultant-image-container">
-                        <video id="planner-video" src="assets/wplanner.mp4" autoplay muted playsinline></video>
+                        <video id="planner-video" src="assets/images/wplanner.mp4" autoplay muted playsinline></video>
                     </div>
                 </div>
                 <div class="ai-form-column">
@@ -316,7 +317,7 @@
                     <a href="#" class="btn btn-outline" id="summary-self-signup-btn"><i class="fas fa-pencil-alt"></i> 셀프 가입</a>
                     <a href="https://pf.kakao.com/_pqxnxmT" target="_blank" class="btn btn-kakao">
                         <div class="kakao-character-container">
-                           <img src="ryan.png" alt="걷는 캐릭터" class="kakao-walking-character">
+                           <img src="assets/images/ryan.png" alt="걷는 캐릭터" class="kakao-walking-character">
                         </div>
                         카톡 상담
                     </a>
@@ -343,7 +344,7 @@
             <div class="secret-benefit-content">
                 <div class="benefit-visual">
                     <h2>성지넷 비밀혜택<br>문자 받아 보기</h2>
-                    <video src="assets/wplanner.mp4" autoplay muted playsinline></video>
+                    <video src="assets/images/wplanner.mp4" autoplay muted playsinline></video>
                 </div>
                 <div class="benefit-form">
                     <div class="form-product-selection">
@@ -589,14 +590,14 @@
                 <p>성지넷은 365일<br>24시간 AI컨설팅</p>
                 <strong>1644-6780</strong>
                 <div class="quick-menu-image-wrapper">
-                     <video src="assets/wplanner.mp4" autoplay muted loop playsinline></video>
+                     <video src="assets/images/wplanner.mp4" autoplay muted loop playsinline></video>
                     <span>24시간 AI컨설팅</span>
                 </div>
             </div>
         </div>
     </aside>
 
-    <script src="js/main-calculator.js"></script>
-    <script src="js/ai-calculator.js"></script>
+    <script type="module" src="js/main-calculator.js"></script>
+    <script type="module" src="js/ai-calculator.js"></script>
 </body>
 </html>
