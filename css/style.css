@@ -702,6 +702,7 @@ input.invalid {
 /* --- 퀵메뉴 스타일 --- */
 
 /* --- 퀵메뉴 스타일 --- */
+/* --- 퀵메뉴 스타일 --- */
 .quick-menu-container {
     position: fixed;
     top: 50%;
@@ -712,7 +713,7 @@ input.invalid {
     align-items: center;
 }
 
-/* 닫혀있을 때 보이는 손잡이 (아이콘 + 화살표) */
+/* 닫혀있을 때 보이는 손잡이 */
 .quick-menu-toggle {
     display: flex;
     align-items: center;
@@ -720,187 +721,79 @@ input.invalid {
     border: 1px solid var(--border-color);
     border-right: none;
     box-shadow: -2px 2px 10px rgba(0,0,0,0.08);
-    padding: 10px 0 10px 10px;
+    padding: 10px;
     border-radius: 8px 0 0 8px;
-    position: relative;
-    z-index: 1050;
-    transition: opacity 0.3s, visibility 0.3s;
     cursor: pointer;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateX(0);
 }
-
-/* 닫혀있을 때 보이는 손잡이의 '왼쪽 화살표' 아이콘 */
-.quick-menu-toggle::before {
-    content: '\f053'; /* Font Awesome 왼쪽 화살표 아이콘 */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    color: var(--text-light);
-    padding-right: 8px;
-}
-
-/* 메뉴가 열리면, 닫혀있을 때의 손잡이는 완전히 숨김 */
 .quick-menu-container.is-open .quick-menu-toggle {
+    transform: translateX(100%);
     opacity: 0;
-    visibility: hidden;
     pointer-events: none;
 }
-
 .quick-menu-icons {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding-right: 10px;
 }
 .quick-menu-icons .icon-item {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f1f3f5;
-    font-size: 18px;
-    color: var(--secondary-color);
-    text-decoration: none;
-    cursor: pointer;
+    width: 40px; height: 40px; border-radius: 8px; display: flex;
+    justify-content: center; align-items: center; background-color: #f1f3f5;
+    font-size: 18px; color: var(--secondary-color); text-decoration: none;
 }
 .quick-menu-icons .icon-item.yellow { background-color: var(--kakao-color); }
 .quick-menu-icons .icon-item.primary { background-color: var(--primary-color); color: white; }
 
 /* 열려있을 때 보이는 큰 패널 */
 .quick-menu-panel {
-    width: 280px;
-    background-color: var(--white-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    padding: 20px;
-    position: fixed;
+    width: 280px; background-color: var(--white-color); border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px;
+    position: absolute; /* [수정] fixed -> absolute */
     right: 0;
-    top: 50%;
-    transform: translate(100%, -50%);
+    transform: translateX(100%);
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     visibility: hidden;
-    z-index: 1051;
     border: 1px solid var(--border-color);
-    max-height: 90vh;
-    overflow-y: auto;
-    overflow-x: visible; /* [중요] 밖으로 튀어나가는 화살표를 보이게 하는 핵심 코드 */
+    max-height: 90vh; overflow-y: auto; overflow-x: visible;
 }
 .quick-menu-container.is-open .quick-menu-panel {
-    transform: translate(0, -50%);
+    transform: translateX(0);
     visibility: visible;
 }
 
-/* 열려있을 때 보이는 '닫기' 손잡이 (오른쪽 화살표) */
+/* 열려있을 때 보이는 '닫기' 손잡이 */
 .toggle-arrow {
-    width: 30px;
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--secondary-color);
-    cursor: pointer;
-    position: absolute;
-    left: -30px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: white;
-    border: 1px solid var(--border-color);
-    border-right: none;
-    border-radius: 8px 0 0 8px;
+    width: 30px; height: 100px; display: flex; justify-content: center;
+    align-items: center; color: var(--secondary-color); cursor: pointer;
+    position: absolute; left: -30px; top: 50%; transform: translateY(-50%);
+    background-color: white; border: 1px solid var(--border-color);
+    border-right: none; border-radius: 8px 0 0 8px;
     box-shadow: -2px 2px 10px rgba(0,0,0,0.08);
 }
 .toggle-arrow i {
     transition: transform 0.3s ease;
-    transform: rotate(180deg);
 }
 
-.quick-menu-section {
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 20px;
-}
-.quick-menu-section:last-of-type {
-    margin-bottom: 0;
-    border-bottom: none;
-    padding-bottom: 0;
-}
-.quick-menu-section h4 {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--secondary-color);
-    margin-bottom: 15px;
-}
-.quick-panel-btn {
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    border-radius: 8px;
-    background-color: #f1f3f5;
-    margin-bottom: 10px;
-    text-decoration: none;
-    color: var(--text-color);
-    font-weight: 500;
-    transition: background-color 0.2s;
-}
-.quick-panel-btn:last-child {
-    margin-bottom: 0;
-}
-.quick-panel-btn:hover {
-    background-color: #e9ecef;
-}
-.quick-panel-btn i {
-    width: 20px;
-    text-align: center;
-    margin-right: 12px;
-    font-size: 16px;
-    color: var(--secondary-color);
-}
+/* (이하 퀵메뉴 관련 나머지 스타일은 이전과 동일) */
+.quick-menu-section { margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
+.quick-menu-section:last-of-type { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+.quick-menu-section h4 { font-size: 14px; font-weight: 700; color: var(--secondary-color); margin-bottom: 15px; }
+.quick-panel-btn { display: flex; align-items: center; padding: 12px; border-radius: 8px; background-color: #f1f3f5; margin-bottom: 10px; text-decoration: none; color: var(--text-color); font-weight: 500; transition: background-color 0.2s; }
+.quick-panel-btn:last-child { margin-bottom: 0; }
+.quick-panel-btn:hover { background-color: #e9ecef; }
+.quick-panel-btn i { width: 20px; text-align: center; margin-right: 12px; font-size: 16px; color: var(--secondary-color); }
 .quick-panel-btn.yellow { background-color: var(--kakao-color); }
 .quick-panel-btn.yellow:hover { background-color: #fdd800; }
 .quick-panel-btn.primary { background-color: var(--primary-color); color: var(--white-color); }
 .quick-panel-btn.primary i { color: var(--white-color); }
 .quick-panel-btn.primary:hover { background-color: var(--primary-dark); }
-
-.quick-menu-contact {
-    background-color: var(--primary-light-bg);
-    border-radius: 8px;
-    padding: 15px;
-    text-align: center;
-    margin-top: 20px;
-}
-.quick-menu-contact p {
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 8px;
-}
-.quick-menu-contact strong {
-    font-size: 22px;
-    color: var(--primary-dark);
-    display: block;
-    margin-bottom: 15px;
-}
-.quick-menu-image-wrapper {
-    position: relative;
-    width: 100%;
-    border-radius: 8px;
-    overflow: hidden;
-}
-.quick-menu-image-wrapper video {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-.quick-menu-image-wrapper span {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(0,0,0,0.5);
-    color: white;
-    padding: 8px;
-    font-size: 14px;
-    font-weight: 500;
-}
+.quick-menu-contact { background-color: var(--primary-light-bg); border-radius: 8px; padding: 15px; text-align: center; margin-top: 20px; }
+.quick-menu-contact p { font-size: 14px; line-height: 1.5; margin-bottom: 8px; }
+.quick-menu-contact strong { font-size: 22px; color: var(--primary-dark); display: block; margin-bottom: 15px; }
+.quick-menu-image-wrapper { position: relative; width: 100%; border-radius: 8px; overflow: hidden; }
+.quick-menu-image-wrapper video { width: 100%; height: auto; display: block; }
+.quick-menu-image-wrapper span { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.5); color: white; padding: 8px; font-size: 14px; font-weight: 500; }
 
 
 /* --- 모바일 반응형 --- */
