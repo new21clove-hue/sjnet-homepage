@@ -4,14 +4,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 데이터베이스에서 전체 데이터를 비동기적으로 불러옵니다.
     const telecomData = await getFullData();
 
-    // 데이터를 불러오지 못하면 실행 중단
+    // 데이터를 불러오지 못하면 에러 메시지를 표시하고 실행 중단
     if (!telecomData) {
         const mainContainer = document.getElementById('calculator-section');
-        if(mainContainer) mainContainer.innerHTML = '<p style="text-align:center; color:red; font-weight:bold;">요금 정보를 불러오는 데 실패했습니다. 페이지를 새로고침하거나 관리자에게 문의하세요.</p>';
+        if(mainContainer) mainContainer.innerHTML = '<p style="text-align:center; color:red; font-weight:bold;">[오류] 요금 정보를 불러오는 데 실패했습니다. 페이지를 새로고침하거나 관리자에게 문의하세요.</p>';
         return;
     }
 
-    // --- 여기서부터 기존 코드 시작 ---
+    // --- 여기서부터 모든 UI 및 계산기 로직 시작 ---
     const els = {
         telecomCont: document.getElementById('telecom-options-simple'),
         internetCont: document.getElementById('internet-options-simple'),
@@ -702,13 +702,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         const initialTelecomOrder = ['SK', 'LG', 'KT', 'SKB', 'Skylife', 'HelloVision'];
         
         initialTelecomOrder.forEach(key => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn'; btn.dataset.key = key;
-            btn.innerHTML = `<span class="item-name">${telecomData[key].name || key}</span>`;
-            btn.onclick = () => handleTelecomClick(key);
-            els.telecomCont.appendChild(btn);
+            if (telecomData[key]) { // 데이터가 존재하는지 확인
+                const btn = document.createElement('button');
+                btn.className = 'option-btn'; btn.dataset.key = key;
+                btn.innerHTML = `<span class="item-name">${telecomData[key].name || key}</span>`;
+                btn.onclick = () => handleTelecomClick(key);
+                els.telecomCont.appendChild(btn);
+            }
         });
-        handleTelecomClick('SK');
+        
+        // 첫 번째 통신사로 초기화
+        if (initialTelecomOrder.length > 0 && telecomData[initialTelecomOrder[0]]) {
+            handleTelecomClick(initialTelecomOrder[0]);
+        }
         
         setupPageViewToggle(); 
         setupQuickMenu();
