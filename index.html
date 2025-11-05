@@ -5,17 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>성지넷 - 인터넷 TV 가입센터</title>
     
-    <!-- ======== 카카오톡 공유 미리보기 설정 ======== -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://[배포된-사이트-주소]/">
     <meta property="og:title" content="성지넷 - 인터넷 TV 가입센터">
-    <!-- [경로 수정] og:image는 전체 주소를 사용해야 합니다. 배포 후 Netlify 주소로 바꿔주세요. -->
     <meta property="og:image" content="https://[배포된-사이트-주소]/assets/images/ai_ryan.png">
     <meta property="og:description" content="AI 스마트플래너로 우리 가족에게 딱 맞는 최적의 요금제를 찾아보세요!">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <!-- CSS 파일 연결 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -29,6 +25,9 @@
                 </div>
                 <div class="contact-info">
                     <a href="tel:1644-6780" class="tel" aria-label="전화 상담 1644-6780"><i class="fas fa-phone-volume"></i> 1644-6780</a>
+                    <button id="quick-menu-header-btn" class="quick-menu-header-btn" aria-label="전체 메뉴 열기">
+                        <i class="fas fa-bars"></i>
+                    </button>
                 </div>
             </div>
             <a href="#" class="ai-calculator-link-header" id="ai-calculator-header-link">
@@ -327,6 +326,101 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="detail-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <button class="modal-close-btn" id="modal-close-btn-header" aria-label="닫기">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body-content">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="secret-benefit-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content large">
+            <button class="modal-close-btn" aria-label="닫기">&times;</button>
+            <div class="secret-benefit-content">
+                <div class="benefit-visual">
+                    <h2>성지넷 비밀혜택<br>문자 받아 보기</h2>
+                    <video src="assets/images/wplanner.mp4" autoplay muted playsinline></video>
+                </div>
+                <div class="benefit-form">
+                    <div class="form-product-selection">
+                        <button class="product-btn selected"><i class="fas fa-wifi"></i><span>인터넷</span></button>
+                        <button class="product-btn"><i class="fas fa-tv"></i><span>TV</span></button>
+                        <button class="product-btn"><i class="fas fa-sim-card"></i><span>유심</span></button>
+                        <button class="product-btn"><i class="fas fa-mobile-alt"></i><span>휴대폰</span></button>
+                    </div>
+                    <form id="benefit-apply-form" novalidate>
+                        <div class="form-group-validation">
+                            <input type="text" id="benefit-name" placeholder="이름을 입력해주세요" required>
+                            <div class="validation-message"></div>
+                        </div>
+                        <div class="form-group-validation">
+                            <input type="tel" id="benefit-phone" placeholder="연락처를 -없이 입력해주세요" required>
+                            <div class="validation-message"></div>
+                        </div>
+                        <div class="consent-area">
+                            <div class="consent-header">
+                                <input type="checkbox" id="benefit-consent-all">
+                                <label for="benefit-consent-all">전체 동의</label>
+                            </div>
+                            <ul class="consent-list">
+                                <li>
+                                    <div class="consent-item-line">
+                                        <input type="checkbox" id="consent-1" class="consent-item consent-required">
+                                        <label for="consent-1">(필수) 개인정보 수집 및 활용 동의</label>
+                                        <a href="#" class="consent-toggle-arrow" aria-label="약관 상세보기">&gt;</a>
+                                    </div>
+                                    <div class="consent-detail">
+                                        <p>수집 항목: 이름, 연락처. 수집 목적: 상담 및 가입 안내. 보유 기간: 3년. 동의를 거부할 수 있으나, 거부 시 서비스 이용이 제한됩니다.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="consent-item-line">
+                                        <input type="checkbox" id="consent-2" class="consent-item consent-required">
+                                        <label for="consent-2">(필수) 개인정보 제3자 제공 및 활용 동의</label>
+                                        <a href="#" class="consent-toggle-arrow" aria-label="약관 상세보기">&gt;</a>
+                                    </div>
+                                    <div class="consent-detail">
+                                        <p>제공받는 자: 각 통신사. 제공 목적: 가입 및 설치. 제공 항목: 이름, 연락처, 주소. 보유 기간: 5년.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="consent-item-line">
+                                        <input type="checkbox" id="consent-3" class="consent-item">
+                                        <label for="consent-3">(선택) 마케팅 정보 수신 동의</label>
+                                        <a href="#" class="consent-toggle-arrow" aria-label="약관 상세보기">&gt;</a>
+                                    </div>
+                                    <div class="consent-detail">
+                                        <p>수신 목적: 신규 상품 및 이벤트 정보 안내. 수신 방법: SMS, 이메일. 동의 철회: 고객센터(1644-6780).</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <button type="submit" class="btn-submit">비밀 혜택 문자 받아 보기</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="custom-alert" class="modal-overlay" role="alertdialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content small">
+             <div class="custom-alert-body">
+                <p class="alert-icon">💌</p>
+                <p class="alert-title">비밀지원금 신청이 완료되었습니다.</p>
+                <p class="alert-message">안내를 위해 성지넷 대표번호(1644-6780)로<br>직접 전화 드려요!(평균 1일 이내)</p>
+                <p class="alert-subtitle">기다릴 필요 없이 지금 바로!</p>
+                <div class="alert-actions">
+                    <button class="btn btn-primary-outline" id="alert-signup-btn">셀프 바로 가입</button>
+                    <button class="btn btn-secondary" id="alert-close-btn">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="modal-overlay" id="affiliate-card-modal" role="dialog" aria-modal="true" aria-hidden="true">
         <div class="modal-content large">
             <div class="modal-header">
@@ -343,35 +437,31 @@
                 <div class="card-tab-content active" id="sk-cards">
                     <div class="card-grid">
                         <div class="affiliate-card">
-                            <!-- [수정] 이미지 태그로 변경 -->
-                            <img src="assets/images/sk-shinhan-card.png" alt="T 우주 신한카드" class="card-image-placeholder">
-                            <h3>T 우주 신한카드</h3>
-                            <div class="card-benefit">월 최대 20,000원 할인</div>
-                            <p class="card-condition">전월 실적 40만원 이상 시</p>
+                            <a href="https://www.tworld.co.kr/poc/html/product/TS3.3.3T.html" target="_blank"><img src="https://www.tworld.co.kr/img/poc/card/card-tello-lotte.png" alt="롯데 TELLO K 카드" class="card-image-placeholder"></a>
+                            <h3>롯데 TELLO K 카드</h3>
+                            <div class="card-benefit">월 최대 26,000원 할인</div>
+                            <p class="card-condition">전월 실적 120만원 이상 시</p>
                             <a href="https://www.tworld.co.kr/poc/html/product/TS3.3.3T.html" target="_blank" class="btn-card-details">자세히 보기</a>
                         </div>
                         <div class="affiliate-card">
-                            <!-- [수정] 이미지 태그로 변경 -->
-                            <img src="assets/images/sk-hyundai-card.png" alt="T다운 현대카드" class="card-image-placeholder">
+                            <a href="https://www.tworld.co.kr/poc/html/product/TS3.3.3T.html" target="_blank"><img src="https://www.tworld.co.kr/img/poc/card/card-tdown-hyundai.png" alt="T다운 현대카드" class="card-image-placeholder"></a>
                             <h3>T다운 현대카드</h3>
                             <div class="card-benefit">월 최대 25,000원 할인</div>
                             <p class="card-condition">전월 실적 70만원 이상 시</p>
                             <a href="https://www.tworld.co.kr/poc/html/product/TS3.3.3T.html" target="_blank" class="btn-card-details">자세히 보기</a>
                         </div>
                         <div class="affiliate-card">
-                            <!-- [수정] 이미지 태그로 변경 -->
-                            <img src="assets/images/sk-kb-card.png" alt="T라이트 KB국민카드" class="card-image-placeholder">
-                            <h3>T라이트 KB국민카드</h3>
+                            <a href="https://www.tworld.co.kr/poc/html/product/TS3.3.3T.html" target="_blank"><img src="https://www.tworld.co.kr/img/poc/card/card-tlight-kb.png" alt="T-Light KB국민카드" class="card-image-placeholder"></a>
+                            <h3>T-Light KB국민카드</h3>
                             <div class="card-benefit">월 최대 22,000원 할인</div>
                             <p class="card-condition">전월 실적 80만원 이상 시</p>
                             <a href="https://www.tworld.co.kr/poc/html/product/TS3.3.3T.html" target="_blank" class="btn-card-details">자세히 보기</a>
                         </div>
-                        <!-- [추가] 새로운 카드 -->
                         <div class="affiliate-card">
-                            <img src="assets/images/sk-lotte-card.png" alt="TELLO K-Lotte카드" class="card-image-placeholder">
-                            <h3>TELLO K-Lotte카드</h3>
-                            <div class="card-benefit">월 최대 26,000원 할인</div>
-                            <p class="card-condition">전월 실적 120만원 이상 시</p>
+                            <a href="https://www.tworld.co.kr/poc/html/product/TS3.3.3T.html" target="_blank"><img src="https://www.tworld.co.kr/img/poc/card/card-samsung-tda.png" alt="삼성 T나는혜택 카드" class="card-image-placeholder"></a>
+                            <h3>삼성 T나는혜택 카드</h3>
+                            <div class="card-benefit">월 최대 20,000원 할인</div>
+                            <p class="card-condition">전월 실적 100만원 이상 시</p>
                             <a href="https://www.tworld.co.kr/poc/html/product/TS3.3.3T.html" target="_blank" class="btn-card-details">자세히 보기</a>
                         </div>
                     </div>
@@ -380,32 +470,31 @@
                 <div class="card-tab-content" id="lg-cards">
                     <div class="card-grid">
                          <div class="affiliate-card">
-                            <img src="assets/images/lg-woori-card.png" alt="LG U+ 카드의정석" class="card-image-placeholder">
-                            <h3>LG U+ 카드의정석(우리카드)</h3>
+                            <a href="https://www.lguplus.com/benefit-affiliate/card-discount" target="_blank"><img src="https://image.lguplus.com/static/pc-static/bill/images/benefit/card/card-lotte.png" alt="LG U+ | 롯데카드" class="card-image-placeholder"></a>
+                            <h3>LG U+ | 롯데카드</h3>
                             <div class="card-benefit">월 최대 25,000원 할인</div>
-                            <p class="card-condition">전월 실적 70만원 이상 시</p>
+                            <p class="card-condition">전월 실적 150만원 이상 시</p>
                             <a href="https://www.lguplus.com/benefit-affiliate/card-discount" target="_blank" class="btn-card-details">자세히 보기</a>
                         </div>
                         <div class="affiliate-card">
-                            <img src="assets/images/lg-hyundai-card.png" alt="LG U+ 현대카드M Edition3" class="card-image-placeholder">
+                            <a href="https://www.lguplus.com/benefit-affiliate/card-discount" target="_blank"><img src="https://image.lguplus.com/static/pc-static/bill/images/benefit/card/card-woori.png" alt="LG U+ 카드의정석 II" class="card-image-placeholder"></a>
+                            <h3>LG U+ 카드의정석 II(우리카드)</h3>
+                            <div class="card-benefit">월 최대 25,000원 할인</div>
+                            <p class="card-condition">전월 실적 100만원 이상 시</p>
+                            <a href="https://www.lguplus.com/benefit-affiliate/card-discount" target="_blank" class="btn-card-details">자세히 보기</a>
+                        </div>
+                        <div class="affiliate-card">
+                            <a href="https://www.lguplus.com/benefit-affiliate/card-discount" target="_blank"><img src="https://image.lguplus.com/static/pc-static/bill/images/benefit/card/card-hyundai.png" alt="LG U+ 현대카드M Edition3" class="card-image-placeholder"></a>
                             <h3>LG U+ 현대카드M Edition3</h3>
                             <div class="card-benefit">월 최대 20,000원 할인</div>
                             <p class="card-condition">전월 실적 70만원 이상 시</p>
                             <a href="https://www.lguplus.com/benefit-affiliate/card-discount" target="_blank" class="btn-card-details">자세히 보기</a>
                         </div>
                         <div class="affiliate-card">
-                            <img src="assets/images/lg-shinhan-card.png" alt="LG U+라서 즐거운 신한카드" class="card-image-placeholder">
+                            <a href="https://www.lguplus.com/benefit-affiliate/card-discount" target="_blank"><img src="https://image.lguplus.com/static/pc-static/bill/images/benefit/card/card-shinhan.png" alt="LG U+라서 즐거운 신한카드" class="card-image-placeholder"></a>
                             <h3>LG U+라서 즐거운 신한카드</h3>
                             <div class="card-benefit">월 최대 20,000원 할인</div>
                             <p class="card-condition">전월 실적 70만원 이상 시</p>
-                            <a href="https://www.lguplus.com/benefit-affiliate/card-discount" target="_blank" class="btn-card-details">자세히 보기</a>
-                        </div>
-                        <!-- [추가] 새로운 카드 -->
-                        <div class="affiliate-card">
-                            <img src="assets/images/lg-kb-card.png" alt="LG U+ KB국민카드" class="card-image-placeholder">
-                            <h3>LG U+ KB국민카드</h3>
-                            <div class="card-benefit">월 최대 17,000원 할인</div>
-                            <p class="card-condition">전월 실적 80만원 이상 시</p>
                             <a href="https://www.lguplus.com/benefit-affiliate/card-discount" target="_blank" class="btn-card-details">자세히 보기</a>
                         </div>
                     </div>
@@ -414,32 +503,31 @@
                 <div class="card-tab-content" id="kt-cards">
                     <div class="card-grid">
                         <div class="affiliate-card">
-                            <img src="assets/images/kt-woori-card.png" alt="KT NU Plus 우리카드" class="card-image-placeholder">
+                            <a href="https://product.kt.com/benefit/membership/web/card.html" target="_blank"><img src="https://product.kt.com/images/benefit/card/card_img_01.png" alt="KT NU Plus 우리카드" class="card-image-placeholder"></a>
                             <h3>KT NU Plus 우리카드</h3>
                             <div class="card-benefit">월 최대 26,000원 할인</div>
                             <p class="card-condition">전월 실적 120만원 이상 시</p>
                             <a href="https://product.kt.com/benefit/membership/web/card.html" target="_blank" class="btn-card-details">자세히 보기</a>
                         </div>
                          <div class="affiliate-card">
-                            <img src="assets/images/kt-hyundai-card.png" alt="KT Super 할부 Plus 현대카드" class="card-image-placeholder">
+                            <a href="https://product.kt.com/benefit/membership/web/card.html" target="_blank"><img src="https://product.kt.com/images/benefit/card/card_img_02.png" alt="KT Super 할부 Plus 현대카드" class="card-image-placeholder"></a>
                             <h3>KT Super 할부 Plus 현대카드</h3>
                             <div class="card-benefit">월 최대 20,000원 할인</div>
                             <p class="card-condition">전월 실적 70만원 이상 시</p>
                             <a href="https://product.kt.com/benefit/membership/web/card.html" target="_blank" class="btn-card-details">자세히 보기</a>
                         </div>
                         <div class="affiliate-card">
-                            <img src="assets/images/kt-shinhan-card.png" alt="Simple Life with KT" class="card-image-placeholder">
+                            <a href="https://product.kt.com/benefit/membership/web/card.html" target="_blank"><img src="https://product.kt.com/images/benefit/card/card_img_03.png" alt="Simple Life with KT" class="card-image-placeholder"></a>
                             <h3>Simple Life with KT(신한카드)</h3>
                             <div class="card-benefit">월 최대 17,000원 할인</div>
                             <p class="card-condition">전월 실적 70만원 이상 시</p>
                             <a href="https://product.kt.com/benefit/membership/web/card.html" target="_blank" class="btn-card-details">자세히 보기</a>
                         </div>
-                        <!-- [추가] 새로운 카드 -->
                         <div class="affiliate-card">
-                            <img src="assets/images/kt-bc-card.png" alt="KT SUPER DC 롯데카드" class="card-image-placeholder">
-                            <h3>KT SUPER DC 롯데카드</h3>
+                            <a href="https://product.kt.com/benefit/membership/web/card.html" target="_blank"><img src="https://product.kt.com/images/benefit/card/card_img_04.png" alt="KT BC바로카드" class="card-image-placeholder"></a>
+                            <h3>KT BC바로카드</h3>
                             <div class="card-benefit">월 최대 25,000원 할인</div>
-                            <p class="card-condition">전월 실적 120만원 이상 시</p>
+                            <p class="card-condition">전월 실적 80만원 이상 시</p>
                             <a href="https://product.kt.com/benefit/membership/web/card.html" target="_blank" class="btn-card-details">자세히 보기</a>
                         </div>
                     </div>
@@ -497,36 +585,24 @@
         </div>
     </div>
     
-    <aside class="quick-menu-container">
-        <!-- [구조 변경] 닫혀있을 때 보이는 '열기' 버튼 -->
-        <div class="quick-menu-toggle">
-            <div class="quick-menu-icons">
-                <a href="#" class="icon-item" data-action="secret-benefit"><i class="fas fa-dollar-sign"></i></a>
-                <a href="https://pf.kakao.com/_pqxnxmT" target="_blank" class="icon-item yellow" data-action="kakao"><i class="fas fa-comment"></i></a>
-                <a href="#" class="icon-item" data-action="self-signup"><i class="fas fa-pencil-alt"></i></a>
-                <a href="#" class="icon-item primary" data-action="ai-finder"><i class="fas fa-search"></i></a>
-            </div>
+    <aside class="quick-menu-panel" id="quick-menu-panel">
+         <button class="toggle-arrow" id="quick-menu-close-btn" aria-label="전체 메뉴 닫기"><i class="fas fa-chevron-right"></i></button>
+        <div class="quick-menu-section">
+            <h4>상담하기</h4>
+            <a href="#" id="quick-secret-benefit-btn" class="quick-panel-btn"><i class="fas fa-dollar-sign"></i> 비밀혜택 문자받기</a>
+            <a href="https://pf.kakao.com/_pqxnxmT" target="_blank" class="quick-panel-btn yellow"><i class="fas fa-comment"></i> 실시간 카톡상담</a>
         </div>
-        <!-- [구조 변경] 열려있을 때 보이는 '패널'과 '닫기' 버튼 -->
-        <div class="quick-menu-panel">
-             <div class="toggle-arrow"><i class="fas fa-chevron-right"></i></div>
-            <div class="quick-menu-section">
-                <h4>상담하기</h4>
-                <a href="#" id="quick-secret-benefit-btn" class="quick-panel-btn"><i class="fas fa-dollar-sign"></i> 비밀혜택 문자받기</a>
-                <a href="https://pf.kakao.com/_pqxnxmT" target="_blank" class="quick-panel-btn yellow"><i class="fas fa-comment"></i> 실시간 카톡상담</a>
-            </div>
-            <div class="quick-menu-section">
-                <h4>가입하기</h4>
-                <a href="#" id="quick-self-signup-btn" class="quick-panel-btn"><i class="fas fa-pencil-alt"></i> 셀프 바로가입</a>
-                <a href="#" id="quick-ai-finder-btn" class="quick-panel-btn primary"><i class="fas fa-search"></i> 나에게 맞는 상품 찾기</a>
-            </div>
-            <div class="quick-menu-contact">
-                <p>성지넷은 365일<br>24시간 AI컨설팅</p>
-                <strong>1644-6780</strong>
-                <div class="quick-menu-image-wrapper">
-                     <video src="assets/images/wplanner.mp4" autoplay muted loop playsinline></video>
-                    <span>24시간 AI컨설팅</span>
-                </div>
+        <div class="quick-menu-section">
+            <h4>가입하기</h4>
+            <a href="#" id="quick-self-signup-btn" class="quick-panel-btn"><i class="fas fa-pencil-alt"></i> 셀프 바로가입</a>
+            <a href="#" id="quick-ai-finder-btn" class="quick-panel-btn primary"><i class="fas fa-search"></i> 나에게 맞는 상품 찾기</a>
+        </div>
+        <div class="quick-menu-contact">
+            <p>성지넷은 365일<br>24시간 AI컨설팅</p>
+            <strong>1644-6780</strong>
+            <div class="quick-menu-image-wrapper">
+                 <video src="assets/images/wplanner.mp4" autoplay muted loop playsinline></video>
+                <span>24시간 AI컨설팅</span>
             </div>
         </div>
     </aside>
