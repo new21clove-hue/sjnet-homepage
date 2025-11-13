@@ -1,0 +1,41 @@
+function doPost(e) {
+  try {
+    // e.postData.contents가 있는지 먼저 확인
+    if (!e.postData || !e.postData.contents) {
+      throw new Error("No data received.");
+    }
+
+    var data;
+    // 데이터가 JSON 형식인지 확인 후 파싱
+    try {
+      data = JSON.parse(e.postData.contents);
+    } catch (jsonError) {
+      // JSON 파싱 실패 시, 일반 텍스트로 처리 시도 (폼 데이터 등)
+      // 여기서는 단순 오류로 처리합니다.
+      throw new Error("Invalid JSON format: " + e.postData.contents);
+    }
+    
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    
+    var timestamp = new Date();
+    // data.products가 배열인지 확인 후 처리
+    var products = Array.isArray(data.products) ? data.products.join(', ') : ''; 
+    var name = data.name || '';
+    var phone = data.phone || '';
+    var marketingConsent = (data.consents && data.consents.marketing) ? '동의' : '미동의';
+    
+    sheet.appendRow([timestamp, products, name, phone, marketingConsent]);
+    
+    return ContentService.createTextOutput(JSON.stringify({
+      'result': 'success',
+      'message': 'Data successfully added.'
+    })).setMimeType(ContentService.MimeType.JSON);
+    
+  } catch (error) {
+    // 오류 발생 시 오류 메시지를 JSON으로 반환
+    return ContentService.createTextOutput(JSON.stringify({
+      'result': 'error',
+      'message': error.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}

@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>성지넷 - 셀프 가입 신청</title>
-    <!-- 다음 주소찾기 API 스크립트 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>">
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <!-- [개선] 외부 CSS 파일 연결 -->
     <link rel="stylesheet" href="css/signup.css">
 </head>
 <body>
@@ -21,19 +20,35 @@
         </ol>
 
         <form id="signup-form">
-            <input type="hidden" id="selected-product-telecom" name="selectedTelecom"><input type="hidden" id="selected-product-internet" name="selectedInternet">
-            <input type="hidden" id="selected-product-tv" name="selectedTv"><input type="hidden" id="selected-product-settop" name="selectedSettop">
-            <input type="hidden" id="selected-product-additionalTv" name="selectedAdditionalTv"><input type="hidden" id="selected-product-combined" name="selectedCombinedProduct">
-            <input type="hidden" id="selected-product-totalPrice" name="selectedTotalPrice"><input type="hidden" id="selected-product-supportFund" name="selectedSupportFund">
+            <!-- URL로 전달된 상품 정보를 저장할 숨겨진 필드 -->
+            <input type="hidden" id="selected-product-telecom" name="selectedTelecom">
+            <input type="hidden" id="selected-product-internet" name="selectedInternet">
+            <input type="hidden" id="selected-product-tv" name="selectedTv">
+            <input type="hidden" id="selected-product-settop" name="selectedSettop">
+            <input type="hidden" id="selected-product-additionalTv" name="selectedAdditionalTv">
+            <input type="hidden" id="selected-product-combined" name="selectedCombinedProduct">
+            <input type="hidden" id="selected-product-totalPrice" name="selectedTotalPrice">
+            <input type="hidden" id="selected-product-supportFund" name="selectedSupportFund">
+            <input type="hidden" id="selected-product-usim" name="selectedUsim">
             
+            <!-- 단계 1: 상품 신청 -->
             <div class="form-section">
-                <h2 class="section-title">상품 신청서</h2><div class="product-summary" id="product-summary-container"></div>
-                <div class="form-group" style="margin-top: 30px;"><div class="choice-box active">신청자 본인입니다.<div class="check-icon">✔</div></div></div>
-                <div class="form-group"><div class="choice-box">가족, 사업자, 외국인 중에 해당됩니다.<div class="check-icon">✔</div></div></div>
+                <h2 class="section-title">상품 신청서</h2>
+                <div class="product-summary" id="product-summary-container">
+                    <!-- JS가 여기에 상품 정보를 채웁니다. -->
+                </div>
+                <div class="form-group" style="margin-top: 30px;">
+                    <div class="choice-box active">신청자 본인입니다.<div class="check-icon">✔</div></div>
+                </div>
+                <div class="form-group">
+                    <div class="choice-box">가족, 사업자, 외국인 중에 해당됩니다.<div class="check-icon">✔</div></div>
+                </div>
             </div>
 
+            <!-- 단계 2: 정보 입력 -->
             <div class="form-section">
-                <h2 class="section-title">가입자 정보를 입력해주세요</h2><h3 class="sub-title" style="border:none; margin-top:0;">가입자 정보</h3>
+                <h2 class="section-title">가입자 정보를 입력해주세요</h2>
+                <h3 class="sub-title" style="border:none; margin-top:0;">가입자 정보</h3>
                 <div class="form-group">
                     <label class="label">고객 구분<span class="required">*</span></label>
                     <div class="radio-group-container">
@@ -96,13 +111,14 @@
                     <label>설치주소<span class="required">*</span></label>
                     <div class="input-with-button">
                         <button type="button" class="btn-gray" onclick="openDaumPostcode()">주소찾기</button>
-                        <input type="text" id="address-basic" name="addressBasic" class="form-control" placeholder="주소" readonly required>
+                        <input type="text" id="address-basic" name="address_basic" class="form-control" placeholder="주소" readonly required>
                     </div>
-                    <input type="text" id="address-detail" name="addressDetail" class="form-control" placeholder="상세 주소 입력" style="margin-top: 10px;" required>
+                    <input type="text" id="address-detail" name="address_detail" class="form-control" placeholder="상세 주소 입력" style="margin-top: 10px;" required>
                     <div class="validation-message"></div>
                 </div>
             </div>
             
+            <!-- 단계 3: 사은품 -->
             <div class="form-section">
                 <h2 class="section-title">사은품 받는 분 정보를 알려주세요</h2>
                 <div class="form-group">
@@ -123,6 +139,7 @@
                 </div>
             </div>
 
+            <!-- 단계 4: 납부방법 -->
             <div class="form-section">
                  <h2 class="section-title">납부 방법을 알려주세요</h2>
                  <div class="form-group">
@@ -168,6 +185,7 @@
                 </div>
             </div>
 
+            <!-- 단계 5: 약관동의 -->
             <div class="form-section">
                 <h2 class="section-title">필독사항과 약관을 확인해주세요</h2>
                 <div class="terms-box">
@@ -218,7 +236,6 @@
     <div class="modal-overlay" id="confirm-modal"><div class="modal-content"><h3>알림</h3><p>납부자와 납부방법이 가입자와 동일합니까?</p><div class="modal-buttons"><button class="nav-btn btn-prev" id="modal-no">아니요</button><button class="nav-btn btn-next" id="modal-yes">예, 동일합니다</button></div></div></div>
     <div class="modal-overlay" id="terms-detail-modal"><div class="modal-content large"><h3 id="terms-modal-title"></h3><div id="terms-modal-body" class="modal-body"></div><div class="modal-buttons"><button class="nav-btn btn-next" id="terms-modal-close">확인</button></div></div></div>
 
-    <!-- [개선] 외부 JS 파일 연결, defer 속성으로 HTML 파싱 후 스크립트 실행 -->
     <script src="js/signup.js" defer></script>
 </body>
 </html>

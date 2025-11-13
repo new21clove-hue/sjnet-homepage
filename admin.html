@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>성지넷 통합 관리자</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>">
     <link rel="stylesheet" href="css/admin-style.css">
 </head>
 <body>
-    <!-- 로그인 화면 -->
     <div id="login-container">
         <h2>🔒 관리자 로그인</h2>
         <input type="password" id="password-input" placeholder="비밀번호 입력">
@@ -15,9 +15,17 @@
         <p id="login-message"></p>
     </div>
 
-    <!-- 메인 관리자 컨테이너 -->
     <div class="admin-container" id="admin-container" style="display: none;">
         <h1>📊 성지넷 통합 관리자</h1>
+
+        <!-- ▼▼▼ [추가] 대시보드 섹션 ▼▼▼ -->
+        <div class="section" id="dashboard-section">
+            <h2>📈 대시보드</h2>
+            <div id="dashboard-content" class="form-grid">
+                <p>데이터를 불러오는 중입니다...</p>
+            </div>
+        </div>
+
         <div class="section">
             <h2>1. 통신사 선택</h2>
             <div class="telecom-selector" id="telecom-selector">
@@ -32,12 +40,26 @@
                     <!-- JS를 통해 동적으로 생성됩니다 -->
                 </div>
             </div>
-            <div class="section" id="gift-section">
-                <h2>3. 사은품 설정 (단위: 원)</h2>
-                <div id="gift-form-grid" class="form-grid">
+            
+            <div class="section" id="gift-policy-section">
+                <h2>3. 사은품 정책 설정 (단위: 만원)</h2>
+                <p class="description">
+                    '인터넷 단독' 또는 '인터넷+TV(기본)' 조합의 기본 사은품을 속도별로 입력합니다.<br>
+                    이후 사용자가 선택하는 추가 옵션에 따라 아래 '추가 사은품' 금액이 자동으로 더해집니다.
+                </p>
+                <div id="gift-policy-form-grid">
                     <!-- JS를 통해 동적으로 생성됩니다 -->
                 </div>
             </div>
+
+            <!-- ▼▼▼ [추가] 변경 이력 섹션 ▼▼▼ -->
+            <div class="section" id="log-section">
+                <h2>📜 최근 변경 이력 (최신 10개)</h2>
+                <div id="log-content" style="max-height: 300px; overflow-y: auto; border: 1px solid #dee2e6; padding: 15px; border-radius: 8px; background-color: #f8f9fa;">
+                    <!-- JS가 여기에 로그를 채웁니다. -->
+                </div>
+            </div>
+
             <div class="actions">
                 <a href="index.html" target="_blank" class="btn-link">고객 페이지 확인</a>
                 <button type="submit" class="btn-save">전체 설정 저장하기</button>
@@ -47,7 +69,6 @@
 
     <div id="toast" class="toast"></div>
 
-    <!-- 모듈 타입으로 스크립트 로드 -->
     <script type="module" src="js/admin.js"></script>
 </body>
 </html>
